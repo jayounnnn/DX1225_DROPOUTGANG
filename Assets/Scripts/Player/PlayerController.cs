@@ -103,6 +103,12 @@ public class PlayerController : Damageable
 
         _playerMovement.ProcessMovement(moveInput,IsRunning, isCrouching);
 
+        if (moveInput != Vector2.zero && isGrounded)
+        {
+            AudioHandler.Instance.PlaySFXIfNotPlaying("Player", 0, this.transform);
+        }
+
+
         ProcessJump(jumpPressed);
 
         if (_inputActions["Parry"].WasPressedThisFrame() && isEquip && !_animator.GetBool("IsAttack"))
