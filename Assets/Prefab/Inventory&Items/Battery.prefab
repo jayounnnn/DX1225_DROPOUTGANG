@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8909837150076308448}
   - component: {fileID: 4023585853028929184}
   m_Layer: 0
-  m_Name: Battery Black
+  m_Name: Battery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

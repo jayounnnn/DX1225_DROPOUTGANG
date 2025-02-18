@@ -8,8 +8,10 @@ public class InventoryManager : MonoBehaviour
 
     public List<Item> items = new List<Item>();
     public InventorySlot[] inventorySlots;
-    [SerializeField] private GameObject inventoryUI;
+    [SerializeField] public GameObject inventoryUI;
     private bool isInventoryOpen = false;
+
+    [SerializeField] public GameObject[] itemPrefabs;
 
     private void Awake()
     {
@@ -25,11 +27,7 @@ public class InventoryManager : MonoBehaviour
             {
                 GameObject itemObject = new GameObject(newItem.itemName);
                 itemObject.transform.SetParent(inventorySlots[i].transform);
-                if (newItem.icon != null)
-                    itemObject.AddComponent<Image>().sprite = newItem.icon;
-                else
-                    Debug.Log("Sprite has no icon");
-                Debug.Log("Updated Inv UI with " + newItem.itemName + " At slot " + i);
+                itemObject.AddComponent<Image>().sprite = newItem.icon;
                 DraggableItem draggable = itemObject.AddComponent<DraggableItem>();
                 draggable.image = itemObject.GetComponent<Image>();
 
@@ -38,6 +36,16 @@ public class InventoryManager : MonoBehaviour
             }
         }
         Debug.Log("Inventory Full!");
+    }
+
+    public GameObject GetItemPrefab(string itemName)
+    {
+        foreach (GameObject prefab in itemPrefabs)
+        {
+            if (prefab.name == itemName)
+                return prefab;
+        }
+        return null; // Return null if the prefab is not found
     }
 
     public void ToggleInventory()
