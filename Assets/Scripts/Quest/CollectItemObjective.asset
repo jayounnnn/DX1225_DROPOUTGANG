@@ -15,4 +15,4 @@ MonoBehaviour:
   description: "Collect 5 Orbs\n "
   isCompleted: 1
   requiredAmount: 5
-  currentAmount: 5
+  currentAmount: 10

@@ -9,17 +9,12 @@ public class QuestUI : MonoBehaviour
 
     public GameObject objectiveUIPrefab;
 
-    public GameObject objectivesContainer;
+    public Transform objectivesContainer;
 
     private Dictionary<QuestObjective, GameObject> objectiveUIInstances = new Dictionary<QuestObjective, GameObject>();
 
     void Update()
     {
-        if (objectivesContainer == null)
-        {
-            Debug.LogError("Objectives container is not assigned in QuestUI!");
-            return;
-        }
 
         foreach (Quest quest in questManager.activeQuests)
         {
@@ -27,17 +22,23 @@ public class QuestUI : MonoBehaviour
             {
                 if (!objectiveUIInstances.ContainsKey(objective))
                 {
-                    GameObject newUI = Instantiate(objectiveUIPrefab, objectivesContainer.transform); 
+                    GameObject newUI = Instantiate(objectiveUIPrefab, objectivesContainer);
                     objectiveUIInstances.Add(objective, newUI);
 
-                    TMP_Text label = newUI.GetComponentInChildren<TMP_Text>(true);
-                    if (label != null)
+                    ObjectiveUIElement uiElement = newUI.GetComponent<ObjectiveUIElement>();
+                    if (uiElement != null)
                     {
-                        label.text = objective.description;
-                    }
-                    else
-                    {
-                        Debug.LogError("TMP_Text component not found in the prefab!");
+
+                        uiElement.descriptionText.text = objective.description;
+
+                        if (objective is CollectItemObjective collectObjective)
+                        {
+                            uiElement.progressText.text = $"{collectObjective.currentAmount}/{collectObjective.requiredAmount}";
+                        }
+                        else
+                        {
+                            uiElement.progressText.text = "";
+                        }
                     }
                 }
             }
@@ -49,15 +50,16 @@ public class QuestUI : MonoBehaviour
         {
             QuestObjective objective = pair.Key;
             GameObject uiObj = pair.Value;
+            ObjectiveUIElement uiElement = uiObj.GetComponent<ObjectiveUIElement>();
 
-            Toggle toggle = uiObj.GetComponentInChildren<Toggle>(true);
-            if (toggle != null)
+            if (uiElement != null)
             {
-                toggle.isOn = objective.isCompleted;
-            }
-            else
-            {
-                Debug.LogError("Toggle component not found in the prefab!");
+                uiElement.objectiveToggle.isOn = objective.isCompleted;
+
+                if (objective is CollectItemObjective collectObjective)
+                {
+                    uiElement.progressText.text = $"{collectObjective.currentAmount}/{collectObjective.requiredAmount}";
+                }
             }
 
             bool stillActive = false;
@@ -69,7 +71,6 @@ public class QuestUI : MonoBehaviour
                     break;
                 }
             }
-
             if (!stillActive)
             {
                 objectivesToRemove.Add(objective);

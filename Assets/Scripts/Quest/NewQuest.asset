@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e9294092eb249648ae568130594448c, type: 3}
   m_Name: NewQuest
   m_EditorClassIdentifier: 
-  questName: 
+  questName: Impps
   questDescription: 
-  objectives: []
+  objectives:
+  - {fileID: 11400000, guid: 426d25352f8879e4f8a3b2d82cde003a, type: 2}
   nextQuest: {fileID: 0}
