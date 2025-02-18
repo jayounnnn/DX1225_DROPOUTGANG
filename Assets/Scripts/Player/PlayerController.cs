@@ -78,21 +78,21 @@ public class PlayerController : Damageable
             _uiManager.EnableFinisherUI();
         }
 
-        if (_inputActions["Equip"].WasPressedThisFrame())
-        {
-            isEquip = !isEquip;
-            _animator.SetBool("IsEquip", isEquip);
-            if (isEquip)
-            {
-                _animator.SetTrigger("Equip");
-                _uiManager.EquipUI();
-            }
-            else
-            {
-                _animator.SetTrigger("UnEquip");
-                _uiManager.UnEquipUI();
-            }
-        }
+        //if (_inputActions["Equip"].WasPressedThisFrame())
+        //{
+        //    isEquip = !isEquip;
+        //    _animator.SetBool("IsEquip", isEquip);
+        //    if (isEquip)
+        //    {
+        //        _animator.SetTrigger("Equip");
+        //        _uiManager.EquipUI();
+        //    }
+        //    else
+        //    {
+        //        _animator.SetTrigger("UnEquip");
+        //        _uiManager.UnEquipUI();
+        //    }
+        //}
         Vector2 moveInput = _inputActions["Move"].ReadValue<Vector2>();
         bool IsRunning = _inputActions["Sprinting"].IsPressed();
         if (_inputActions["Crouching"].WasPressedThisFrame())
@@ -105,33 +105,45 @@ public class PlayerController : Damageable
 
         ProcessJump(jumpPressed);
 
-        if (_inputActions["Parry"].WasPressedThisFrame() && isEquip && !_animator.GetBool("IsAttack"))
+        //if (_inputActions["Parry"].WasPressedThisFrame() && isEquip && !_animator.GetBool("IsAttack"))
+        //{
+        //    _playerCombat.StartParry();
+        //}
+
+        //if (_inputActions["LightAttack"].WasPressedThisFrame() && !isEquip)
+        //{
+        //    _playerCombat.QueueLightAttack();
+        //}
+
+        //if (_inputActions["LightAttack"].WasPressedThisFrame() && isEquip)
+        //{
+        //    _playerCombat.QueueSwordAttack();
+        //}
+
+        //if (_inputActions["HeavyAttack"].WasPressedThisFrame() && isEquip)
+        //{
+        //    _playerCombat.QueueFinalSwordAttack();
+        //    _uiManager.DisableFinisherUI();
+        //}
+
+        //if (_inputActions["HeavyAttack"].WasPressedThisFrame() && !isEquip)
+        //{
+        //    _playerCombat.QueueHeavyAttack();
+        //}
+
+        // Toggle Inventory UI
+        if (_inputActions["ToggleInventory"].WasPressedThisFrame())
         {
-            _playerCombat.StartParry();
+            InventoryManager.instance.ToggleInventory();
+        }
+        //Interact With Items
+        if (_inputActions["Interact"].WasPressedThisFrame())
+        {
+            TryPickUpItem();
         }
 
-        if (_inputActions["LightAttack"].WasPressedThisFrame() && !isEquip)
-        {
-            _playerCombat.QueueLightAttack();
-        }
 
-        if (_inputActions["LightAttack"].WasPressedThisFrame() && isEquip)
-        {
-            _playerCombat.QueueSwordAttack();
-        }
-
-        if (_inputActions["HeavyAttack"].WasPressedThisFrame() && isEquip)
-        {
-            _playerCombat.QueueFinalSwordAttack();
-            _uiManager.DisableFinisherUI();
-        }
-
-        if (_inputActions["HeavyAttack"].WasPressedThisFrame() && !isEquip)
-        {
-            _playerCombat.QueueHeavyAttack();
-        }
-
-        isGrounded = _characterController.isGrounded;
+            isGrounded = _characterController.isGrounded;
         _animator.SetBool("IsGrounded", isGrounded);
 
         if (!isCrouching && isGrounded)
@@ -144,6 +156,21 @@ public class PlayerController : Damageable
         {
             _characterController.center = new Vector3(0, 0.8f, 0);
            _characterController.height = crouchingHeight;
+        }
+    }
+    //Picking Up Item
+    void TryPickUpItem()
+    {
+        float pickupRadius = 1f;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, pickupRadius);
+        foreach (Collider collider in colliders)
+        {
+            PickupItem pickupItem = collider.GetComponent<PickupItem>();
+            if (pickupItem != null && pickupItem.isPlayerNearby)
+            {
+                pickupItem.PickUp();
+                return;
+            }
         }
     }
 
