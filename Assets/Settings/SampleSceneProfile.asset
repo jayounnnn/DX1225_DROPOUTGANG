@@ -273,6 +273,52 @@ MonoBehaviour:
   rounded:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &-6664029167458095115
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ab12ccd5b93254da4d331b12fbce44, type: 3}
+  m_Name: NeoGlitchEffectComponent
+  m_EditorClassIdentifier: 
+  active: 1
+  <displayName>k__BackingField: 
+  threshold:
+    m_OverrideState: 1
+    m_Value: 0.01
+  intensity:
+    m_OverrideState: 1
+    m_Value: 1
+  scatter:
+    m_OverrideState: 1
+    m_Value: 0.7
+  clamp:
+    m_OverrideState: 1
+    m_Value: 65472
+  maxIterations:
+    m_OverrideState: 0
+    m_Value: 6
+  tint:
+    m_OverrideState: 0
+    m_Value:
+      r: 1
+      g: 1
+      b: 1
+      a: 1
+    hdr: 0
+  dotsDensity:
+    m_OverrideState: 1
+    m_Value: 10
+  dotsCutoff:
+    m_OverrideState: 1
+    m_Value: 0.48
+  scrollDirection:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0}
 --- !u!114 &-5179353248969937876
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -285,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
   m_Name: LiftGammaGain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   lift:
     m_OverrideState: 1
     m_Value: {x: 1, y: 0.72884274, z: 0.9254271, w: -0.10314284}
@@ -345,7 +391,6 @@ MonoBehaviour:
   - {fileID: 849379129802519247}
   - {fileID: -7893295128165547882}
   - {fileID: -7011558710299706105}
-  - {fileID: 6301958299852802433}
   - {fileID: -3976492834335701536}
   - {fileID: -5179353248969937876}
   - {fileID: -8217479578614908293}
@@ -401,32 +446,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56ab12ccd5b93254da4d331b12fbce44, type: 3}
   m_Name: BloomEffectComponent
   m_EditorClassIdentifier: 
-  active: 0
-  threshold:
-    m_OverrideState: 1
-    m_Value: 0.9
-  intensity:
-    m_OverrideState: 1
+  active: 1
+  glitchIntensity:
+    m_OverrideState: 0
+    m_Value: 0.5
+  glitchFrequency:
+    m_OverrideState: 0
     m_Value: 1
-  scatter:
-    m_OverrideState: 1
-    m_Value: 0.7
-  clamp:
-    m_OverrideState: 1
-    m_Value: 65472
-  maxIterations:
+  glitchDisplacement:
     m_OverrideState: 0
-    m_Value: 6
-  tint:
+    m_Value: 0.05
+  glitchDirection:
     m_OverrideState: 0
-    m_Value: {r: 1, g: 1, b: 1, a: 1}
-    hdr: 0
-  dotsDensity:
-    m_OverrideState: 1
-    m_Value: 10
-  dotsCutoff:
-    m_OverrideState: 1
-    m_Value: 0.4
-  scrollDirection:
-    m_OverrideState: 0
-    m_Value: {x: 0, y: 0}
+    m_Value: {x: 1, y: 0}
