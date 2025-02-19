@@ -45,8 +45,25 @@ public class PickupItem : MonoBehaviour
 
     public void PickUp()
     {
-        Debug.Log("Adding Item " + item.itemName);
-        InventoryManager.instance.AddItem(item);
+        Debug.Log("Picking up item: " + item.itemName);
+
+        if (item.itemType == ItemType.Torch)
+        {
+            Torch torch = GetComponent<Torch>();
+            if (torch != null)
+            {
+                torch.ActivateFlashlightPanel();
+            }
+            else
+            {
+                Debug.LogWarning("Torch script missing on this object!");
+            }
+        }
+        else
+        {
+            InventoryManager.instance.AddItem(item);
+        }
+
         Destroy(gameObject);
     }
 }

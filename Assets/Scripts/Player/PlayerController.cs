@@ -154,7 +154,7 @@ public class PlayerController : Damageable
         {
             if (flashlightmanager != null)
             {
-                flashlightmanager.GetComponent<Flashlight>().ToggleFlashlight();
+                flashlightmanager.GetComponent<FlashlightManager>().ToggleFlashlight();
                 Debug.Log("Toggle flashlight ");
             }
         }

@@ -16,6 +16,12 @@ public class BatterySlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (batteryItem != null)
+        {
+            Debug.Log("Battery slot is already occupied!");
+            return;
+        }
+
         GameObject dropped = eventData.pointerDrag;
         DraggableItem draggableItem = dropped.GetComponent<DraggableItem>();
 

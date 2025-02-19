@@ -21,6 +21,12 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(Item newItem)
     {
+        if (newItem.itemType == ItemType.Torch)
+        {
+            Debug.Log("Torch picked up! Enabling Flashlight Panel.");
+            return; // Do not add to inventory
+        }
+
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             if (inventorySlots[i].transform.childCount == 0)
