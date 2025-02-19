@@ -40,6 +40,8 @@ public class PlayerController : Damageable
     private float jumpfallingHeight;
     private float crouchingHeight;
 
+    [SerializeField] private GameObject flashlightmanager;
+
     protected override void Start()
     {
         base.Start();
@@ -147,9 +149,18 @@ public class PlayerController : Damageable
         {
             TryPickUpItem();
         }
+        //Toggle Flashlight
+        if (_inputActions["ToggleFlashlight"].WasPressedThisFrame())
+        {
+            if (flashlightmanager != null)
+            {
+                flashlightmanager.GetComponent<Flashlight>().ToggleFlashlight();
+                Debug.Log("Toggle flashlight ");
+            }
+        }
 
 
-            isGrounded = _characterController.isGrounded;
+        isGrounded = _characterController.isGrounded;
         _animator.SetBool("IsGrounded", isGrounded);
 
         if (!isCrouching && isGrounded)
