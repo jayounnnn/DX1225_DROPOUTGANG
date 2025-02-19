@@ -16,6 +16,8 @@ public class QuestManager : MonoBehaviour
             {
                 Debug.Log("Quest Completed: " + quest.questName);
 
+                ResetQuest(quest);
+
                 if (quest.nextQuest != null)
                 {
                     if (!activeQuests.Contains(quest.nextQuest))
@@ -29,4 +31,21 @@ public class QuestManager : MonoBehaviour
             }
         }
     }
+
+    void ResetQuest(Quest quest)
+    {
+        foreach (QuestObjective objective in quest.objectives)
+        {
+            if (objective is IResettable resettableObjective)
+            {
+                resettableObjective.ResetData();
+            }
+        }
+
+        if (quest is IResettable resettableQuest)
+        {
+            resettableQuest.ResetData();
+        }
+    }
+
 }

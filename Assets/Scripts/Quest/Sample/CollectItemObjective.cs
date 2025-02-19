@@ -20,4 +20,10 @@ public class CollectItemObjective : QuestObjective
     {
         return isCompleted;
     }
+
+    public override void ResetData()
+    {
+        base.ResetData();
+        currentAmount = 0;
+    }
 }
