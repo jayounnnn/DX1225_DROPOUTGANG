@@ -128,6 +128,7 @@ public class PlayerController : Damageable
         {
             _firstPersonMovement.Move(moveInput, IsRunning, isCrouching);
             _firstPersonMovement.Jump(jumpPressed);
+            _playerMovement.Reset();
 
         }
         else

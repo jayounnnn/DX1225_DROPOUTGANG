@@ -18,6 +18,11 @@ public class PlayerMovement : MonoBehaviour
     private bool wasRunning = false;
     private bool isCrouching = false;
 
+    public void Reset()
+    {
+        velocityX = 0.0f;
+        velocityZ = 0.0f;
+    }
     void Awake()
     {
         _characterController = GetComponent<CharacterController>();
