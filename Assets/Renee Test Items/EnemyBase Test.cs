@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public abstract class EnemyBase : MonoBehaviour
+public abstract class EnemyBase : Damageable // Now inherits from Damageable
 {
-    public float health = 100f;
     public float speed = 2f;
     public int damage = 10;
     public bool isInvincible = false;
@@ -11,8 +10,10 @@ public abstract class EnemyBase : MonoBehaviour
     protected Rigidbody rb;
     protected EnemyStateMachine stateMachine;
 
-    protected virtual void Awake()
+    protected void Awake()
     {
+        base.Start();
+
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         stateMachine = GetComponent<EnemyStateMachine>();
@@ -28,18 +29,19 @@ public abstract class EnemyBase : MonoBehaviour
         if (stateMachine == null)
         {
             Debug.LogError(name + " missing EnemyStateMachine", this);
-            return; // Prevent further execution
+            return; 
         }
 
-        stateMachine.ChangeState(new IdleState(this, stateMachine)); // Start in Idle
+        stateMachine.ChangeState(new IdleState(this, stateMachine)); 
     }
 
-    public virtual void TakeDamage(float amount)
+    public override void TakeDamage(float amount)
     {
-        health -= amount;
-        if (health <= 0)
+        base.TakeDamage(amount); 
+
+        if (!isAlive)
         {
-            Die();
+            OnDestroyed();
         }
     }
 
@@ -50,7 +52,7 @@ public abstract class EnemyBase : MonoBehaviour
         Attack();
     }
 
-    protected virtual void Die()
+    protected override void OnDestroyed() // Overrides Damageable's OnDestroyed()
     {
         if (!isInvincible)
         {
@@ -63,10 +65,3 @@ public abstract class EnemyBase : MonoBehaviour
         }
     }
 }
-
-
-
-/*    public void PerformAttack()
-    {
-        Attack();
-    }*/
