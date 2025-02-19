@@ -17,7 +17,7 @@ public class DialogueManager : MonoBehaviour
 
     private Dialogue currentDialogue;
     private int currentLineIndex;
-    private Dictionary<string, object> npcMemory = new Dictionary<string, object>();
+    private bool isTyping = false;
 
     private void Awake()
     {
@@ -34,6 +34,14 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(true);
         FreezePlayer(true);
         ShowLine();
+    }
+
+    public void Update()
+    {
+        if (dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
+        {
+            ContinueDialogue();
+        }
     }
 
     public void ShowLine()
@@ -54,24 +62,36 @@ public class DialogueManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        // Generate new options
-        foreach (var option in line.options)
+        // If there are options, create buttons
+        if (line.options.Count > 0)
         {
-            GameObject newOption = Instantiate(optionPrefab, optionsContainer);
-            TMP_Text optionText = newOption.GetComponentInChildren<TMP_Text>();
-            Button optionButton = newOption.GetComponent<Button>();
-
-            if (optionText != null)
+            foreach (var option in line.options)
             {
-                optionText.text = option.optionText;
-            }
+                GameObject newOption = Instantiate(optionPrefab, optionsContainer);
+                TMP_Text optionText = newOption.GetComponentInChildren<TMP_Text>();
+                Button optionButton = newOption.GetComponent<Button>();
 
-            if (optionButton != null)
-            {
-                optionButton.onClick.RemoveAllListeners();
-                int nextIndex = option.nextDialogueIndex;
-                optionButton.onClick.AddListener(() => SelectOption(nextIndex));
+                if (optionText != null)
+                {
+                    optionText.text = option.optionText;
+                }
+
+                if (optionButton != null)
+                {
+                    optionButton.onClick.RemoveAllListeners();
+                    int nextIndex = option.nextDialogueIndex;
+                    optionButton.onClick.AddListener(() => SelectOption(nextIndex));
+                }
             }
+        }
+    }
+
+    public void ContinueDialogue()
+    {
+        if (currentDialogue.lines[currentLineIndex].options.Count == 0) // If no options, auto-progress
+        {
+            currentLineIndex++;
+            ShowLine();
         }
     }
 
@@ -95,47 +115,20 @@ public class DialogueManager : MonoBehaviour
         FreezePlayer(false);
     }
 
-    //private void FreezePlayer(bool isFrozen)
-    //{
-    //    if (isFrozen)
-    //    {
-    //        Cursor.lockState = CursorLockMode.None;
-    //        Cursor.visible = true;
-    //        Time.timeScale = 0f;  // Pause the game
-    //        FindObjectOfType<PlayerMovement>().SetMovement(false);
-    //    }
-    //    else
-    //    {
-    //        Cursor.lockState = CursorLockMode.Locked;
-    //        Cursor.visible = false;
-    //        Time.timeScale = 1f;  // Resume the game
-    //        FindObjectOfType<PlayerMovement>().SetMovement(true);
-    //    }
-    //}
-
     private void FreezePlayer(bool isFrozen)
     {
         if (isFrozen)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Time.timeScale = 0f;  // Pauses the game to freeze movement
+            Time.timeScale = 0f;  // Pause the game
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            Time.timeScale = 1f;  // Resumes the game
+            Time.timeScale = 1f;  // Resume the game
+
         }
-    }
-
-    public void StoreNPCMemory(string key, object value)
-    {
-        npcMemory[key] = value;
-    }
-
-    public object GetNPCMemory(string key)
-    {
-        return npcMemory.ContainsKey(key) ? npcMemory[key] : null;
     }
 }

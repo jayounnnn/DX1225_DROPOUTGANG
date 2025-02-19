@@ -6,7 +6,7 @@ public class DialogueLine
 {
     public string speakerName;
     [TextArea(2, 5)] public string dialogueText;
-    public List<DialogueOption> options;
+    public List<DialogueOption> options = new List<DialogueOption>(); // Ensure options exist but can be empty
 }
 
 [System.Serializable]
