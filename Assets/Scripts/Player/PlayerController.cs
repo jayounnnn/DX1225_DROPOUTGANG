@@ -12,6 +12,8 @@ public class PlayerController : Damageable
     private InputActionAsset _inputActions;
     private Animator _animator;
     private BloodSplatterScreen _bloodSplatterScreen;
+    private CameraSwitcher _cameraSwitcher;
+    private FirstPersonMovement _firstPersonMovement;
 
     [SerializeField] private ParticleSystem SwordEffect;
 
@@ -39,6 +41,8 @@ public class PlayerController : Damageable
     private float originalHeight;
     private float jumpfallingHeight;
     private float crouchingHeight;
+    [SerializeField] private float mouseSensitivity;
+    [SerializeField] private float xRotation;
 
     protected override void Start()
     {
@@ -50,6 +54,8 @@ public class PlayerController : Damageable
         _animator = GetComponent<Animator>();
         _bloodSplatterScreen = GetComponent<BloodSplatterScreen>();
         _audioSource = GetComponent<AudioSource>();
+        _cameraSwitcher = GetComponent<CameraSwitcher>();
+        _firstPersonMovement = GetComponent<FirstPersonMovement>();
 
         _inputActions = _playerInput.actions;
 
@@ -73,26 +79,43 @@ public class PlayerController : Damageable
     {
         if (!IsAlive) return;
 
-        if (_playerCombat.CanTriggerFinalAttack)
+
+        if (_cameraSwitcher != null && _cameraSwitcher.IsFirstPerson)
         {
-            _uiManager.EnableFinisherUI();
+            Vector2 lookInput = _inputActions["Look"].ReadValue<Vector2>();
+
+            float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
+            float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
+
+            xRotation -= mouseY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+            transform.Rotate(0, mouseX, 0);
+        }
+        {
+            //if (_playerCombat.CanTriggerFinalAttack)
+            //{
+            //    _uiManager.EnableFinisherUI();
+            //}
+
+            //if (_inputActions["Equip"].WasPressedThisFrame())
+            //{
+            //    isEquip = !isEquip;
+            //    _animator.SetBool("IsEquip", isEquip);
+            //    if (isEquip)
+            //    {
+            //        _animator.SetTrigger("Equip");
+            //        _uiManager.EquipUI();
+            //    }
+            //    else
+            //    {
+            //        _animator.SetTrigger("UnEquip");
+            //        _uiManager.UnEquipUI();
+            //    }
+            //}
         }
 
-        //if (_inputActions["Equip"].WasPressedThisFrame())
-        //{
-        //    isEquip = !isEquip;
-        //    _animator.SetBool("IsEquip", isEquip);
-        //    if (isEquip)
-        //    {
-        //        _animator.SetTrigger("Equip");
-        //        _uiManager.EquipUI();
-        //    }
-        //    else
-        //    {
-        //        _animator.SetTrigger("UnEquip");
-        //        _uiManager.UnEquipUI();
-        //    }
-        //}
+
         Vector2 moveInput = _inputActions["Move"].ReadValue<Vector2>();
         bool IsRunning = _inputActions["Sprinting"].IsPressed();
         if (_inputActions["Crouching"].WasPressedThisFrame())
@@ -101,42 +124,66 @@ public class PlayerController : Damageable
         }
         bool jumpPressed = _inputActions["Jump"].WasPressedThisFrame();
 
-        _playerMovement.ProcessMovement(moveInput,IsRunning, isCrouching);
+        if (_cameraSwitcher.IsFirstPerson)
+        {
+            _firstPersonMovement.Move(moveInput, IsRunning, isCrouching);
+            _firstPersonMovement.Jump(jumpPressed);
+
+        }
+        else
+        {
+            _playerMovement.ProcessMovement(moveInput, IsRunning, isCrouching);
+            ProcessJump(jumpPressed);
+
+            isGrounded = _characterController.isGrounded;
+            _animator.SetBool("IsGrounded", isGrounded);
+
+            if (!isCrouching && isGrounded)
+            {
+                _characterController.center = new Vector3(0, 1.1f, 0);
+                _characterController.height = originalHeight;
+
+            }
+            else if (isCrouching)
+            {
+                _characterController.center = new Vector3(0, 0.8f, 0);
+                _characterController.height = crouchingHeight;
+            }
+        }
 
         if (moveInput != Vector2.zero && isGrounded)
         {
             AudioHandler.Instance.PlaySFXIfNotPlaying("Player", 0, this.transform);
         }
 
+        {
+            //if (_inputActions["Parry"].WasPressedThisFrame() && isEquip && !_animator.GetBool("IsAttack"))
+            //{
+            //    _playerCombat.StartParry();
+            //}
 
-        ProcessJump(jumpPressed);
+            //if (_inputActions["LightAttack"].WasPressedThisFrame() && !isEquip)
+            //{
+            //    _playerCombat.QueueLightAttack();
+            //}
 
-        //if (_inputActions["Parry"].WasPressedThisFrame() && isEquip && !_animator.GetBool("IsAttack"))
-        //{
-        //    _playerCombat.StartParry();
-        //}
+            //if (_inputActions["LightAttack"].WasPressedThisFrame() && isEquip)
+            //{
+            //    _playerCombat.QueueSwordAttack();
+            //}
 
-        //if (_inputActions["LightAttack"].WasPressedThisFrame() && !isEquip)
-        //{
-        //    _playerCombat.QueueLightAttack();
-        //}
+            //if (_inputActions["HeavyAttack"].WasPressedThisFrame() && isEquip)
+            //{
+            //    _playerCombat.QueueFinalSwordAttack();
+            //    _uiManager.DisableFinisherUI();
+            //}
 
-        //if (_inputActions["LightAttack"].WasPressedThisFrame() && isEquip)
-        //{
-        //    _playerCombat.QueueSwordAttack();
-        //}
+            //if (_inputActions["HeavyAttack"].WasPressedThisFrame() && !isEquip)
+            //{
+            //    _playerCombat.QueueHeavyAttack();
+            //}
 
-        //if (_inputActions["HeavyAttack"].WasPressedThisFrame() && isEquip)
-        //{
-        //    _playerCombat.QueueFinalSwordAttack();
-        //    _uiManager.DisableFinisherUI();
-        //}
-
-        //if (_inputActions["HeavyAttack"].WasPressedThisFrame() && !isEquip)
-        //{
-        //    _playerCombat.QueueHeavyAttack();
-        //}
-
+        }
         // Toggle Inventory UI
         if (_inputActions["ToggleInventory"].WasPressedThisFrame())
         {
@@ -149,19 +196,9 @@ public class PlayerController : Damageable
         }
 
 
-            isGrounded = _characterController.isGrounded;
-        _animator.SetBool("IsGrounded", isGrounded);
-
-        if (!isCrouching && isGrounded)
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            _characterController.center = new Vector3(0, 1.1f, 0);
-            _characterController.height = originalHeight;
-            
-        }
-        else if (isCrouching)
-        {
-            _characterController.center = new Vector3(0, 0.8f, 0);
-           _characterController.height = crouchingHeight;
+            _cameraSwitcher.ToggleCamera();
         }
     }
     //Picking Up Item

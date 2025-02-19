@@ -5,31 +5,25 @@ using UnityEngine;
 
 public class CameraSwitcher : MonoBehaviour
 {
-
     public CinemachineVirtualCamera firstPersonCamera;
-
-    public CinemachineVirtualCamera thirdPersonCamera;
+    public CinemachineFreeLook thirdPersonCamera;
 
     public GameObject characterModel;
 
-    private MeshRenderer[] meshRenderers;
+    public float hideDelay = 1.0f;
 
+    private SkinnedMeshRenderer[] meshRenderers;
     private bool isFirstPerson = false;
+    private Coroutine meshDisableCoroutine;
+
+    public bool IsFirstPerson => isFirstPerson;
 
     void Start()
     {
         if (characterModel != null)
-            meshRenderers = characterModel.GetComponentsInChildren<MeshRenderer>();
+            meshRenderers = characterModel.GetComponentsInChildren<SkinnedMeshRenderer>();
 
-        SetThirdPerson();
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            ToggleCamera();
-        }
+        SetFirstPerson();
     }
 
     public void ToggleCamera()
@@ -46,13 +40,9 @@ public class CameraSwitcher : MonoBehaviour
         firstPersonCamera.Priority = 20;
         thirdPersonCamera.Priority = 10;
 
-        if (meshRenderers != null)
-        {
-            foreach (MeshRenderer mr in meshRenderers)
-            {
-                mr.enabled = false;
-            }
-        }
+        if (meshDisableCoroutine != null)
+            StopCoroutine(meshDisableCoroutine);
+        meshDisableCoroutine = StartCoroutine(DelayedDisableMeshRenderers(hideDelay));
     }
 
     void SetThirdPerson()
@@ -61,9 +51,33 @@ public class CameraSwitcher : MonoBehaviour
         firstPersonCamera.Priority = 10;
         thirdPersonCamera.Priority = 20;
 
+        if (meshDisableCoroutine != null)
+        {
+            StopCoroutine(meshDisableCoroutine);
+            meshDisableCoroutine = null;
+        }
+
+        EnableMeshRenderers();
+    }
+
+    IEnumerator DelayedDisableMeshRenderers(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (isFirstPerson && meshRenderers != null)
+        {
+            foreach (SkinnedMeshRenderer mr in meshRenderers)
+            {
+                mr.enabled = false;
+            }
+        }
+        meshDisableCoroutine = null;
+    }
+
+    void EnableMeshRenderers()
+    {
         if (meshRenderers != null)
         {
-            foreach (MeshRenderer mr in meshRenderers)
+            foreach (SkinnedMeshRenderer mr in meshRenderers)
             {
                 mr.enabled = true;
             }
