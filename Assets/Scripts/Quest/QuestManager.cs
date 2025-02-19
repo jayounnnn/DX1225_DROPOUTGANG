@@ -48,4 +48,33 @@ public class QuestManager : MonoBehaviour
         }
     }
 
+    public void ResetAllScriptableObjects()
+    {
+
+        foreach (Quest quest in activeQuests)
+        {
+
+            foreach (QuestObjective objective in quest.objectives)
+            {
+
+                if (objective is IResettable resettableObjective)
+                {
+                    resettableObjective.ResetData();
+                }
+            }
+
+          
+            if (quest is IResettable resettableQuest)
+            {
+                resettableQuest.ResetData();
+            }
+        }
+
+        activeQuests.Clear();
+    }
+
+    private void OnApplicationQuit()
+    {
+        ResetAllScriptableObjects();
+    }
 }
