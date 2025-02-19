@@ -14,25 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   lines:
   - speakerName: Level 100 Mafia Boss
-    dialogueText: "I didn't get to the top by playing fair\u2014I got here by making
-      the rules."
+    dialogueText: You think power comes from a gun? No. Power comes from knowing
+      when to pull the trigger... and when to let them beg.
     options:
-    - optionText: okay bozo
+    - optionText: oh my gyatt
       nextDialogueIndex: 0
-    - optionText: so humble king
+    - optionText: so skibidi
       nextDialogueIndex: 1
-    - optionText: oh my skibidi sigma ohio gyatt !!
+    - optionText: tsts igwim gng sht vro
       nextDialogueIndex: 2
-    - optionText: shiver my timbers
+    - optionText: so alpha!!
       nextDialogueIndex: 3
   - speakerName: Level 1 Crook
-    dialogueText: gime my moni
+    dialogueText: gime ma mani
     options:
     - optionText: no
       nextDialogueIndex: 0
     - optionText: yes
       nextDialogueIndex: 1
-    - optionText: u brokie
+    - optionText: oh noooo
       nextDialogueIndex: 2
-    - optionText: get a job init
+    - optionText: '*nonchalantly shakes dread and decline*'
       nextDialogueIndex: 3
