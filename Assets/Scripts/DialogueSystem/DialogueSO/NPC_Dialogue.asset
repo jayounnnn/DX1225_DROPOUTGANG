@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: NPC_Dialogue
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  lines:
+  - speakerName: Level 100 Mafia Boss
+    dialogueText: "I didn't get to the top by playing fair\u2014I got here by making
+      the rules."
+    options:
+    - optionText: okay bozo
+      nextDialogueIndex: 0
+    - optionText: so humble king
+      nextDialogueIndex: 1
+    - optionText: oh my skibidi sigma ohio gyatt !!
+      nextDialogueIndex: 2
+    - optionText: shiver my timbers
+      nextDialogueIndex: 3
+  - speakerName: Level 1 Crook
+    dialogueText: gime my moni
+    options:
+    - optionText: no
+      nextDialogueIndex: 0
+    - optionText: yes
+      nextDialogueIndex: 1
+    - optionText: u brokie
+      nextDialogueIndex: 2
+    - optionText: get a job init
+      nextDialogueIndex: 3
