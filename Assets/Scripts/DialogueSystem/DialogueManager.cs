@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class DialogueManager : MonoBehaviour
 
     [Header("UI Elements")]
     public GameObject dialoguePanel;
-    public Text speakerNameText;
-    public Text dialogueText;
+    public TMP_Text speakerNameText;
+    public TMP_Text dialogueText;
     public Transform optionsContainer;
     public GameObject optionPrefab;  // Prefab for player choices
 
@@ -26,9 +27,18 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
+        if (dialogue == null)
+        {
+            Debug.LogError("Dialogue is NULL! Make sure NPC has a Dialogue assigned.");
+            return;
+        }
+
+        Debug.Log("Starting dialogue with: " + dialogue.lines[0].speakerName);
+
         currentDialogue = dialogue;
         currentLineIndex = 0;
         dialoguePanel.SetActive(true);
+        Debug.Log("Dialogue panel set active."); // Check if UI is turning on
         ShowLine();
     }
 
@@ -44,18 +54,19 @@ public class DialogueManager : MonoBehaviour
         speakerNameText.text = line.speakerName;
         dialogueText.text = line.dialogueText;
 
-        // Clear old options
+        Debug.Log($"Displaying line: {line.speakerName} - {line.dialogueText}");
+
         foreach (Transform child in optionsContainer)
             Destroy(child.gameObject);
 
-        // Generate new options
         foreach (var option in line.options)
         {
             GameObject newOption = Instantiate(optionPrefab, optionsContainer);
-            newOption.GetComponentInChildren<Text>().text = option.optionText;
-            newOption.GetComponent<Button>().onClick.AddListener(() => SelectOption(option.nextDialogueIndex));
+            newOption.GetComponentInChildren<TMP_Text>().text = option.optionText;
+            newOption.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => SelectOption(option.nextDialogueIndex));
         }
     }
+
 
     public void SelectOption(int nextIndex)
     {
