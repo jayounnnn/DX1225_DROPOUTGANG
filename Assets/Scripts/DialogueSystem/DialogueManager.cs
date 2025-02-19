@@ -13,11 +13,11 @@ public class DialogueManager : MonoBehaviour
     public TMP_Text speakerNameText;
     public TMP_Text dialogueText;
     public Transform optionsContainer;
-    public GameObject optionPrefab;  // Prefab for player choices
+    public GameObject optionPrefab;
 
     private Dialogue currentDialogue;
     private int currentLineIndex;
-    private Dictionary<string, object> npcMemory = new Dictionary<string, object>(); // Stores NPC-related data (e.g., quest status)
+    private Dictionary<string, object> npcMemory = new Dictionary<string, object>();
 
     private void Awake()
     {
@@ -27,18 +27,12 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue)
     {
-        if (dialogue == null)
-        {
-            Debug.LogError("Dialogue is NULL! Make sure NPC has a Dialogue assigned.");
-            return;
-        }
-
-        Debug.Log("Starting dialogue with: " + dialogue.lines[0].speakerName);
+        if (dialogue == null) return;
 
         currentDialogue = dialogue;
         currentLineIndex = 0;
         dialoguePanel.SetActive(true);
-        Debug.Log("Dialogue panel set active."); // Check if UI is turning on
+        FreezePlayer(true);
         ShowLine();
     }
 
@@ -54,30 +48,85 @@ public class DialogueManager : MonoBehaviour
         speakerNameText.text = line.speakerName;
         dialogueText.text = line.dialogueText;
 
-        Debug.Log($"Displaying line: {line.speakerName} - {line.dialogueText}");
-
+        // Clear old options
         foreach (Transform child in optionsContainer)
+        {
             Destroy(child.gameObject);
+        }
 
+        // Generate new options
         foreach (var option in line.options)
         {
             GameObject newOption = Instantiate(optionPrefab, optionsContainer);
-            newOption.GetComponentInChildren<TMP_Text>().text = option.optionText;
-            newOption.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => SelectOption(option.nextDialogueIndex));
+            TMP_Text optionText = newOption.GetComponentInChildren<TMP_Text>();
+            Button optionButton = newOption.GetComponent<Button>();
+
+            if (optionText != null)
+            {
+                optionText.text = option.optionText;
+            }
+
+            if (optionButton != null)
+            {
+                optionButton.onClick.RemoveAllListeners();
+                int nextIndex = option.nextDialogueIndex;
+                optionButton.onClick.AddListener(() => SelectOption(nextIndex));
+            }
         }
     }
 
-
     public void SelectOption(int nextIndex)
     {
-        currentLineIndex = nextIndex;
-        ShowLine();
+        if (nextIndex == -1)
+        {
+            EndDialogue();
+        }
+        else
+        {
+            currentLineIndex = nextIndex;
+            ShowLine();
+        }
     }
 
     public void EndDialogue()
     {
         dialoguePanel.SetActive(false);
         currentDialogue = null;
+        FreezePlayer(false);
+    }
+
+    //private void FreezePlayer(bool isFrozen)
+    //{
+    //    if (isFrozen)
+    //    {
+    //        Cursor.lockState = CursorLockMode.None;
+    //        Cursor.visible = true;
+    //        Time.timeScale = 0f;  // Pause the game
+    //        FindObjectOfType<PlayerMovement>().SetMovement(false);
+    //    }
+    //    else
+    //    {
+    //        Cursor.lockState = CursorLockMode.Locked;
+    //        Cursor.visible = false;
+    //        Time.timeScale = 1f;  // Resume the game
+    //        FindObjectOfType<PlayerMovement>().SetMovement(true);
+    //    }
+    //}
+
+    private void FreezePlayer(bool isFrozen)
+    {
+        if (isFrozen)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Time.timeScale = 0f;  // Pauses the game to freeze movement
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            Time.timeScale = 1f;  // Resumes the game
+        }
     }
 
     public void StoreNPCMemory(string key, object value)
