@@ -349,9 +349,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bed95871d1236c74c8224dc478a2f966, type: 3}
       insertIndex: -1
       addedObject: {fileID: 174577074325122652}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bed95871d1236c74c8224dc478a2f966, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7854494302918754743}
   m_SourcePrefab: {fileID: 100100000, guid: bed95871d1236c74c8224dc478a2f966, type: 3}
 --- !u!1 &8125857309401771257 stripped
 GameObject:
@@ -397,19 +394,6 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 424901ca2fb5f4c4988a890d85913843, type: 3}
     batteryLife: 100
   isPlayerNearby: 0
---- !u!114 &7854494302918754743
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8125857309401771257}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c44d58c026aafe4a8cbf86332960d77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flashlightPanel: {fileID: 0}
 --- !u!4 &8903344364463797827 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bed95871d1236c74c8224dc478a2f966, type: 3}
