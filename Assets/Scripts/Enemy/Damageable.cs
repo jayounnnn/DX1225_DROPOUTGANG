@@ -5,6 +5,9 @@ using UnityEngine;
 public class Damageable : MonoBehaviour
 {
     [SerializeField]
+    protected float maxHealth = 100;
+
+    [SerializeField]
     protected float health = 100;
     protected bool IsAlive = true;
     public bool isAlive => IsAlive;
@@ -28,6 +31,8 @@ public class Damageable : MonoBehaviour
                 originalColors[i] = materials[i].color;
             }
         }
+
+        health = maxHealth;
     }
 
     public virtual void TakeDamage(float damage)
@@ -47,6 +52,13 @@ public class Damageable : MonoBehaviour
             IsAlive = false;
             OnDestroyed();
         }
+    }
+
+    public virtual void Heal(float healAmount)
+    {
+
+        health = Mathf.Min(health + healAmount, maxHealth);
+        Debug.Log("Healed " + healAmount + " HP. Current Health: " + health);
     }
 
     protected virtual void OnDestroyed()
