@@ -53,7 +53,7 @@ public class FirstPersonMovement : MonoBehaviour
         if (cameraTransform != null)
         {
             normalCameraHeight = cameraTransform.localPosition.y;
-            crouchCameraHeight = normalCameraHeight - 0.5f;
+            crouchCameraHeight = normalCameraHeight - 1.8f;
         }
 
         if (playerCamera != null)
