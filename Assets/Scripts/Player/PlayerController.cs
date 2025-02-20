@@ -20,6 +20,8 @@ public class PlayerController : Damageable
     [SerializeField] public GameObject HandSword;
     [SerializeField] public GameObject BackSword;
 
+    [SerializeField] public GameObject RightArm;
+
     [SerializeField] private float jumpSpeed = 5f;
     [SerializeField] private float jumpButtonGracePeriod = 0.2f;
     [SerializeField] private float jumpHorizontalSpeed = 2f;
@@ -43,6 +45,8 @@ public class PlayerController : Damageable
     private float crouchingHeight;
     [SerializeField] private float mouseSensitivity;
     [SerializeField] private float xRotation;
+    [SerializeField] private Transform cameraPivot;
+
 
     protected override void Start()
     {
@@ -91,7 +95,13 @@ public class PlayerController : Damageable
             xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
             transform.Rotate(0, mouseX, 0);
+
+            if (cameraPivot != null)
+            {
+                cameraPivot.localRotation = Quaternion.Euler(xRotation, 0, 0);
+            }
         }
+
         {
             //if (_playerCombat.CanTriggerFinalAttack)
             //{

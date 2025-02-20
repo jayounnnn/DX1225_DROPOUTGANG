@@ -9,6 +9,7 @@ public class CameraSwitcher : MonoBehaviour
     public CinemachineFreeLook thirdPersonCamera;
 
     public GameObject characterModel;
+    public GameObject RightArm;
 
     public float hideDelay = 1.0f;
 
@@ -68,6 +69,7 @@ public class CameraSwitcher : MonoBehaviour
             foreach (SkinnedMeshRenderer mr in meshRenderers)
             {
                 mr.enabled = false;
+                RightArm.gameObject.SetActive(true);
             }
         }
         meshDisableCoroutine = null;
@@ -80,6 +82,7 @@ public class CameraSwitcher : MonoBehaviour
             foreach (SkinnedMeshRenderer mr in meshRenderers)
             {
                 mr.enabled = true;
+                RightArm.gameObject.SetActive(false);
             }
         }
     }
