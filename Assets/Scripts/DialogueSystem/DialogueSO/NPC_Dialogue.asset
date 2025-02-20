@@ -16,4 +16,23 @@ MonoBehaviour:
   - speakerName: Level 100 Mafia Boss
     dialogueText: You think power comes from a gun? No. Power comes from knowing
       when to pull the trigger... and when to let them beg.
-    options: []
+    options:
+    - optionText: oh my gyatt
+      nextDialogueIndex: 0
+    - optionText: so alpha and sigma omg
+      nextDialogueIndex: 1
+    - optionText: on skibidi
+      nextDialogueIndex: 2
+    - optionText: fr gng??
+      nextDialogueIndex: 3
+  - speakerName: Level 1 Crook
+    dialogueText: gimi ma moni
+    options:
+    - optionText: yes
+      nextDialogueIndex: 0
+    - optionText: no
+      nextDialogueIndex: 1
+    - optionText: why
+      nextDialogueIndex: 2
+    - optionText: '*nonchalantly shakes dread*'
+      nextDialogueIndex: 3

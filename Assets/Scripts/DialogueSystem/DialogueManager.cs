@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -19,29 +20,49 @@ public class DialogueManager : MonoBehaviour
     private int currentLineIndex;
     private bool isTyping = false;
 
+    private PlayerInput _playerInput;
+    private InputActionAsset _inputActions;
+
+    private bool isDialogueActive = false;
+    private bool inputCooldown = false;
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
+        _playerInput = FindObjectOfType<PlayerInput>();
+        if (_playerInput != null)
+        {
+            _inputActions = _playerInput.actions;
+        }
+    }
+
+    private void Update()
+    {
+        if (_inputActions != null && _inputActions["ToggleDialogue"].WasPressedThisFrame())
+        {
+            if (!isDialogueActive)
+            {
+                StartDialogue(FindObjectOfType<NPCInteractable>()?.dialogue);
+            }
+            else if (!inputCooldown)
+            {
+                ContinueOrCloseDialogue();
+            }
+        }
     }
 
     public void StartDialogue(Dialogue dialogue)
     {
-        if (dialogue == null) return;
+        if (dialogue == null || isDialogueActive) return;
 
         currentDialogue = dialogue;
         currentLineIndex = 0;
         dialoguePanel.SetActive(true);
+        isDialogueActive = true;
         FreezePlayer(true);
         ShowLine();
-    }
-
-    public void Update()
-    {
-        if (dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
-        {
-            ContinueDialogue();
-        }
     }
 
     public void ShowLine()
@@ -62,7 +83,6 @@ public class DialogueManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        // If there are options, create buttons
         if (line.options.Count > 0)
         {
             foreach (var option in line.options)
@@ -86,13 +106,23 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void ContinueDialogue()
+    public void ContinueOrCloseDialogue()
     {
-        if (currentDialogue.lines[currentLineIndex].options.Count == 0) // If no options, auto-progress
+        if (currentDialogue.lines[currentLineIndex].options.Count == 0)
         {
             currentLineIndex++;
-            ShowLine();
+
+            if (currentLineIndex >= currentDialogue.lines.Count)
+            {
+                EndDialogue();
+            }
+            else
+            {
+                ShowLine();
+            }
         }
+
+        StartCoroutine(ToggleCooldown());
     }
 
     public void SelectOption(int nextIndex)
@@ -111,6 +141,7 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue()
     {
         dialoguePanel.SetActive(false);
+        isDialogueActive = false;
         currentDialogue = null;
         FreezePlayer(false);
     }
@@ -121,14 +152,41 @@ public class DialogueManager : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Time.timeScale = 0f;  // Pause the game
+            Time.timeScale = 0f;
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            Time.timeScale = 1f;  // Resume the game
-
+            Time.timeScale = 1f;
         }
+    }
+
+    private IEnumerator ToggleCooldown()
+    {
+        inputCooldown = true;
+        yield return new WaitForSecondsRealtime(0.75f);
+        inputCooldown = false;
+    }
+
+    // === NEW FUNCTION: Enemy AI Triggers Dialogue from ScriptableObject ===
+    public void ShowEnemyDialogue(EnemyDialogue enemyDialogue, float duration = 3f)
+    {
+        if (isDialogueActive || enemyDialogue == null || enemyDialogue.dialogues.Count == 0) return;
+
+        string randomDialogue = enemyDialogue.dialogues[Random.Range(0, enemyDialogue.dialogues.Count)];
+        StartCoroutine(ShowEnemyDialogueCoroutine(enemyDialogue.enemyName, randomDialogue, duration));
+    }
+
+    private IEnumerator ShowEnemyDialogueCoroutine(string enemyName, string dialogueText, float duration)
+    {
+        dialoguePanel.SetActive(true);
+        speakerNameText.text = enemyName;
+        this.dialogueText.text = dialogueText;
+        isDialogueActive = true;
+
+        yield return new WaitForSeconds(duration);
+
+        EndDialogue();
     }
 }
