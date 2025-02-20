@@ -78,6 +78,14 @@ public class testEnemyMovement : EnemyBase
                 SetNewRoamTarget();
             }
         }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            if (!(stateMachine.GetCurrentState() is StunState))
+            {
+                StunState.ForceStun(this);
+                return;
+            }
+        }
 
         detectedPlayer = DetectPlayerWithConeCast();
         if (detectedPlayer != null)
