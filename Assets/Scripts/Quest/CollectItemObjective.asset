@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: CollectItemObjective
   m_EditorClassIdentifier: 
   description: "Collect 5 Orbs\n "
-  isCompleted: 1
+  isCompleted: 0
   requiredAmount: 5
-  currentAmount: 10
+  currentAmount: 0
