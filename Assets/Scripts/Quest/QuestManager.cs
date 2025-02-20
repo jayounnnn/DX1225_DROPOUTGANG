@@ -73,6 +73,14 @@ public class QuestManager : MonoBehaviour
         activeQuests.Clear();
     }
 
+    public void AddQuest(Quest newQuest)
+    {
+        if (newQuest != null && !activeQuests.Contains(newQuest))
+        {
+            activeQuests.Add(newQuest);
+        }
+    }
+
     private void OnApplicationQuit()
     {
         ResetAllScriptableObjects();
