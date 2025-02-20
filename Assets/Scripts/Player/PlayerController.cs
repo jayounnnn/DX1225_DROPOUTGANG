@@ -138,6 +138,7 @@ public class PlayerController : Damageable
 
         if (_cameraSwitcher.IsFirstPerson)
         {
+            _playerMovement.Reset();
             _firstPersonMovement.Move(moveInput, IsRunning, isCrouching);
             _firstPersonMovement.Jump(jumpPressed);
             _playerMovement.Reset();
