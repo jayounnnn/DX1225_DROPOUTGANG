@@ -17,4 +17,4 @@ MonoBehaviour:
 '
   isCompleted: 0
   requiredAmount: 200
-  currentAmount: 5
+  currentAmount: 0
