@@ -11005,6 +11005,7 @@ GameObject:
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
+  - component: {fileID: 963194230}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -11120,6 +11121,50 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!43 &968909962
 Mesh:
   m_ObjectHideFlags: 0
@@ -25372,6 +25417,10 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 1011
       objectReference: {fileID: 0}
+    - target: {fileID: 552236864456191017, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1ab6efd11da795f41be1e0acc33b286b, type: 2}
     - target: {fileID: 602648236418844465, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -25436,6 +25485,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 131697442}
+    - target: {fileID: 1110243588773163739, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5a86af623e5fef143b6c2beda952644d, type: 2}
     - target: {fileID: 1140688963134317810, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -25460,6 +25513,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 272220676}
+    - target: {fileID: 1318848024145473530, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0001
+      objectReference: {fileID: 0}
     - target: {fileID: 1332222350353775191, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -25776,10 +25833,22 @@ PrefabInstance:
       propertyPath: m_Tangents.Array.data[95].z
       value: -2.8421723e-14
       objectReference: {fileID: 0}
+    - target: {fileID: 1612067078203321730, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ba22071223bea464b8f1a948b672f233, type: 2}
     - target: {fileID: 1636408257414793962, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: be601c8135cfb6244890e77a70c962d7, type: 2}
+    - target: {fileID: 1705453554339853075, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.559
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705453554339853075, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.25
+      objectReference: {fileID: 0}
     - target: {fileID: 1721682900311448235, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -25796,6 +25865,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 744770562}
+    - target: {fileID: 1824907492858297759, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.001
+      objectReference: {fileID: 0}
     - target: {fileID: 1853731155495265315, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -26210,7 +26283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2976076309728472445, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.132248
+      value: -10.13
       objectReference: {fileID: 0}
     - target: {fileID: 2976076309728472445, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_LocalPosition.z
