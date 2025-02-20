@@ -61,12 +61,22 @@ public class HotbarSlot : MonoBehaviour, IDropHandler
                 if (item != null)
                 {
                     UpdateHotbarUI(item.icon);
+
+                    // Mark consumables as being in the hotbar
+                    if (item.itemType == ItemType.Consumable)
+                    {
+                        Consumable consumable = itemInSlot.GetComponent<Consumable>();
+                        if (consumable != null)
+                        {
+                            consumable.isInHotbar = true;
+                        }
+                    }
                 }
             }
         }
     }
 
-    private void UpdateHotbarUI(Sprite itemIcon)
+    public void UpdateHotbarUI(Sprite itemIcon)
     {
         if (hotbarItemUI != null)
         {

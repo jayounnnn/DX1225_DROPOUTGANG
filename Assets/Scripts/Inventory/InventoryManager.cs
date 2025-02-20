@@ -59,6 +59,12 @@ public class InventoryManager : MonoBehaviour
                 DraggableItem draggable = itemObject.AddComponent<DraggableItem>();
                 draggable.image = itemObject.GetComponent<Image>();
 
+                if (newItem.itemType == ItemType.Consumable)
+                {
+                    Consumable consumable = itemObject.AddComponent<Consumable>();
+                    consumable.item = newItem;
+                }
+
                 items.Add(newItem);
                 return;
             }

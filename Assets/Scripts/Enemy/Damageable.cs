@@ -54,10 +54,11 @@ public class Damageable : MonoBehaviour
         }
     }
 
-    public virtual void Heal(float heal)
+    public virtual void Heal(float healAmount)
     {
 
-        health -= heal;
+        health = Mathf.Min(health + healAmount, maxHealth);
+        Debug.Log("Healed " + healAmount + " HP. Current Health: " + health);
     }
 
     protected virtual void OnDestroyed()

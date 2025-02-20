@@ -41,6 +41,7 @@ public class PlayerController : Damageable
     private float crouchingHeight;
 
     [SerializeField] private GameObject flashlightmanager;
+    public HotbarSlot[] hotbarSlots;
 
     protected override void Start()
     {
@@ -69,6 +70,12 @@ public class PlayerController : Damageable
 
         _uiManager.SetMaxHealth(health);
         _uiManager.UnEquipUI();
+
+        // Ensure hotbarSlots has 2 elements
+        if (hotbarSlots == null || hotbarSlots.Length < 2)
+        {
+            Debug.LogError("HotbarSlots array is not properly assigned! Ensure both hotbar slots are set in the Inspector.");
+        }
     }
 
     void Update()
@@ -158,7 +165,16 @@ public class PlayerController : Damageable
                 Debug.Log("Toggle flashlight ");
             }
         }
-
+        if (_inputActions["UseItem1"].WasPressedThisFrame())
+        {
+            // Use item from first hotbar slot
+            UseHotbarItem(0);
+        }
+        if (_inputActions["UseItem2"].WasPressedThisFrame())
+        {
+            // Use item from first hotbar slot
+            UseHotbarItem(1);
+        }
 
         isGrounded = _characterController.isGrounded;
         _animator.SetBool("IsGrounded", isGrounded);
@@ -188,6 +204,38 @@ public class PlayerController : Damageable
                 pickupItem.PickUp();
                 return;
             }
+        }
+    }
+
+    private void UseHotbarItem(int slotIndex)
+    {
+        // Prevent OutOfBounds exception
+        if (hotbarSlots == null || slotIndex >= hotbarSlots.Length)
+        {
+            Debug.LogError("Hotbar slot " + slotIndex + " is out of range! Make sure all hotbar slots are assigned.");
+            return;
+        }
+
+        if (hotbarSlots[slotIndex].transform.childCount > 0) // Check if slot has an item
+        {
+            Transform itemInSlot = hotbarSlots[slotIndex].transform.GetChild(0);
+            Consumable consumable = itemInSlot.GetComponent<Consumable>();
+
+            if (consumable != null)
+            {
+                Debug.Log("Using consumable from Hotbar Slot " + (slotIndex + 1));
+                consumable.UseConsumable();
+                // Update UI after consuming the item
+                hotbarSlots[slotIndex].RemoveItem();
+            }
+            else
+            {
+                Debug.Log("Item in Hotbar Slot " + (slotIndex + 1) + " is not a consumable.");
+            }
+        }
+        else
+        {
+            Debug.Log("Hotbar Slot " + (slotIndex + 1) + " is empty.");
         }
     }
 
