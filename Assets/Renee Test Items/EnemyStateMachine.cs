@@ -26,4 +26,9 @@ public class EnemyStateMachine : MonoBehaviour
         currentState = newState;
         currentState?.EnterState();
     }
+
+    public IEnemyState GetCurrentState()
+    {
+        return currentState;
+    }
 }
