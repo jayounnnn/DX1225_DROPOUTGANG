@@ -18,13 +18,18 @@ public class PlayerMovement : MonoBehaviour
     private bool wasRunning = false;
     private bool isCrouching = false;
 
+    public void Reset()
+    {
+        velocityX = 0.0f;
+        velocityZ = 0.0f;
+    }
     void Awake()
     {
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
     }
 
-    public void ProcessMovement(Vector2 input, bool isRunning, bool crouch)
+    public void ProcessMovement(Vector2 input, bool isRunning, bool crouch, bool disableRotation = false)
     {
 
         isCrouching = crouch;
@@ -83,16 +88,18 @@ public class PlayerMovement : MonoBehaviour
         movement = Quaternion.Euler(0, Camera.main.transform.eulerAngles.y, 0) * movement;
         _characterController.Move(movement * Time.deltaTime);
 
-
-        if (input.y >= 0)
+        if (!disableRotation)
         {
-            if (movement.magnitude > 0)
+
+            if (input.y >= 0)
             {
-                Quaternion targetRotation = Quaternion.LookRotation(movement);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+                if (movement.magnitude > 0)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(movement);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+                }
             }
         }
-
 
         wasRunning = isRunning;
     }
