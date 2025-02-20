@@ -35,7 +35,7 @@ public class CameraSwitcher : MonoBehaviour
             SetFirstPerson();
     }
 
-    void SetFirstPerson()
+    public void SetFirstPerson()
     {
         isFirstPerson = true;
         firstPersonCamera.Priority = 20;
@@ -46,7 +46,7 @@ public class CameraSwitcher : MonoBehaviour
         meshDisableCoroutine = StartCoroutine(DelayedDisableMeshRenderers(hideDelay));
     }
 
-    void SetThirdPerson()
+    public void SetThirdPerson()
     {
         isFirstPerson = false;
         firstPersonCamera.Priority = 10;
@@ -75,7 +75,7 @@ public class CameraSwitcher : MonoBehaviour
         meshDisableCoroutine = null;
     }
 
-    void EnableMeshRenderers()
+   private void EnableMeshRenderers()
     {
         if (meshRenderers != null)
         {
@@ -86,4 +86,14 @@ public class CameraSwitcher : MonoBehaviour
             }
         }
     }
+
+    public void SetFixedCameraRotation(Vector3 forwardDirection)
+    {
+        if (firstPersonCamera != null)
+        {
+            firstPersonCamera.transform.rotation = Quaternion.LookRotation(forwardDirection, Vector3.up);
+        }
+    }
+
+
 }
