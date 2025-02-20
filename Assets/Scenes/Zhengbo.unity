@@ -531,10 +531,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 963194227}
     - target: {fileID: 8637502089732810633, guid: 4b15bc053864aed47809cf271ae7e77c, type: 3}
-      propertyPath: RightArm
-      value: 
-      objectReference: {fileID: 6769528741821565188}
-    - target: {fileID: 8637502089732810633, guid: 4b15bc053864aed47809cf271ae7e77c, type: 3}
       propertyPath: thirdPersonCamera
       value: 
       objectReference: {fileID: 12836677}
@@ -1702,11 +1698,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 476900107}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6769528741821565188 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1317649340643412923, guid: 4b15bc053864aed47809cf271ae7e77c, type: 3}
-  m_PrefabInstance: {fileID: 430171535}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

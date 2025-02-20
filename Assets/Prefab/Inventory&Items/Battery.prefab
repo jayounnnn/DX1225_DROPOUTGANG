@@ -101,8 +101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   item:
     itemName: Battery
-    itemType: 1
+    itemType: 3
     icon: {fileID: 21300000, guid: 6c2e979e7120dbd4687219558a8aebbc, type: 3}
+    batteryLife: 100
   isPlayerNearby: 0
 --- !u!65 &4023585853028929184
 BoxCollider:

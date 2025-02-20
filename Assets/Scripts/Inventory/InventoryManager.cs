@@ -9,7 +9,13 @@ public class InventoryManager : MonoBehaviour
     public List<Item> items = new List<Item>();
     public InventorySlot[] inventorySlots;
     [SerializeField] public GameObject inventoryUI;
+    [SerializeField] private GameObject flashlightPanel;
+    [SerializeField] private GameObject hotbarPanel;
+    [SerializeField] private Button flashlightBtn;
+    [SerializeField] private Button hotbarBtn;
+
     private bool isInventoryOpen = false;
+    private bool hasTorch = false;
 
     [SerializeField] public GameObject[] itemPrefabs;
 
@@ -19,8 +25,30 @@ public class InventoryManager : MonoBehaviour
             instance = this;
     }
 
+    private void Start()
+    {
+        // Ensure HotbarPanel is the default panel
+        flashlightPanel.SetActive(false);
+        hotbarPanel.SetActive(true);
+
+        // Disable FlashlightBtn until a torch is collected
+        flashlightBtn.interactable = false;
+
+        // Add button listeners
+        flashlightBtn.onClick.AddListener(ShowFlashlightPanel);
+        hotbarBtn.onClick.AddListener(ShowHotbarPanel);
+    }
+
     public void AddItem(Item newItem)
     {
+        if (newItem.itemType == ItemType.Torch)
+        {
+            Debug.Log("Torch picked up! Enabling Flashlight Panel.");
+            flashlightBtn.interactable = true;
+            hasTorch = true;
+            return; // Do not add to inventory
+        }
+
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             if (inventorySlots[i].transform.childCount == 0)
@@ -30,6 +58,12 @@ public class InventoryManager : MonoBehaviour
                 itemObject.AddComponent<Image>().sprite = newItem.icon;
                 DraggableItem draggable = itemObject.AddComponent<DraggableItem>();
                 draggable.image = itemObject.GetComponent<Image>();
+
+                if (newItem.itemType == ItemType.Consumable)
+                {
+                    Consumable consumable = itemObject.AddComponent<Consumable>();
+                    consumable.item = newItem;
+                }
 
                 items.Add(newItem);
                 return;
@@ -45,7 +79,23 @@ public class InventoryManager : MonoBehaviour
             if (prefab.name == itemName)
                 return prefab;
         }
-        return null; // Return null if the prefab is not found
+        return null;
+    }
+
+    public void ShowFlashlightPanel()
+    {
+        // Prevent switching if the torch hasn't been collected
+        if (!hasTorch) return;
+        Debug.Log("Switching to FlashlightPanel");
+        flashlightPanel.SetActive(true);
+        hotbarPanel.SetActive(false);
+    }
+
+    public void ShowHotbarPanel()
+    {
+        Debug.Log("Switching to HotbarPanel");
+        hotbarPanel.SetActive(true);
+        flashlightPanel.SetActive(false);
     }
 
     public void ToggleInventory()
