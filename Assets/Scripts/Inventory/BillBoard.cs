@@ -5,6 +5,7 @@ using UnityEngine;
 public class BillBoard : MonoBehaviour
 {
     public GameObject worldCanvas;
+    private float rotationSpeed = 5f;
 
     void Start()
     {
@@ -16,9 +17,16 @@ public class BillBoard : MonoBehaviour
 
     void Update()
     {
-        // Maintain billboard effect
-        Quaternion rotation = Camera.main.transform.rotation;
-        transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
+        if (Camera.main != null)
+        {
+            // Get the direction to the camera
+            Vector3 directionToCamera = Camera.main.transform.position - transform.position;
+            directionToCamera.y = 0; // Keep the canvas upright
+
+            // Smoothly rotate towards the camera
+            Quaternion targetRotation = Quaternion.LookRotation(-directionToCamera);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 
     public void SetCanvasActive(bool isActive)
