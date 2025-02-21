@@ -15,6 +15,7 @@ public class MazeGenerator : MonoBehaviour
     public GameObject wallPrefab;  
     public GameObject floorPrefab;
     public GameObject hiddenWallPrefab;
+    public GameObject endObjectPrefab;
 
     [Range(0f, 1f)]
     public float hiddenWallChance = 0.1f;
@@ -43,7 +44,23 @@ public class MazeGenerator : MonoBehaviour
         RemoveEntranceWall();
 
         DrawMaze();
+
+        PlaceEndObject();
     }
+
+    private void PlaceEndObject()
+    {
+
+        int endX = width - 1;
+        int endY = height - 1;
+
+        Vector3 endPosition = new Vector3(endX * cellSize, 0f, endY * cellSize);
+
+        endPosition.y = 0.5f;
+
+        Instantiate(endObjectPrefab, endPosition, Quaternion.identity);
+    }
+
 
     private void RemoveEntranceWall()
     {
