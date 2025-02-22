@@ -1,50 +1,104 @@
 fileFormatVersion: 2
 guid: 58a137e40d0932742ab5b4ff3cebea35
-timeCreated: 1463415657
-licenseType: Store
 ModelImporter:
-  serializedVersion: 18
-  fileIDToRecycleName:
-    100000: Animated Door
-    100002: Bone_Door_Animated
-    100004: Bone_Door_Break
-    100006: Bone_Door_Break001
-    100008: Bone_Door_Break002
-    100010: bone_Door_Fixed
-    100012: Bone_Poignee_Animated
-    100014: //RootNode
-    400000: Animated Door
-    400002: Bone_Door_Animated
-    400004: Bone_Door_Break
-    400006: Bone_Door_Break001
-    400008: Bone_Door_Break002
-    400010: bone_Door_Fixed
-    400012: Bone_Poignee_Animated
-    400014: //RootNode
-    4300000: Animated Door
-    7400000: Shed_DoorBreakDown
-    7400002: Shed_DoorOpen
-    9500000: //RootNode
-    13700000: Animated Door
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Animated Door
+  - first:
+      1: 100002
+    second: Bone_Door_Animated
+  - first:
+      1: 100004
+    second: Bone_Door_Break
+  - first:
+      1: 100006
+    second: Bone_Door_Break001
+  - first:
+      1: 100008
+    second: Bone_Door_Break002
+  - first:
+      1: 100010
+    second: bone_Door_Fixed
+  - first:
+      1: 100012
+    second: Bone_Poignee_Animated
+  - first:
+      1: 100014
+    second: //RootNode
+  - first:
+      4: 400000
+    second: Animated Door
+  - first:
+      4: 400002
+    second: Bone_Door_Animated
+  - first:
+      4: 400004
+    second: Bone_Door_Break
+  - first:
+      4: 400006
+    second: Bone_Door_Break001
+  - first:
+      4: 400008
+    second: Bone_Door_Break002
+  - first:
+      4: 400010
+    second: bone_Door_Fixed
+  - first:
+      4: 400012
+    second: Bone_Poignee_Animated
+  - first:
+      4: 400014
+    second: //RootNode
+  - first:
+      43: 4300000
+    second: Animated Door
+  - first:
+      74: 7400000
+    second: Shed_DoorBreakDown
+  - first:
+      74: 7400002
+    second: Shed_DoorOpen
+  - first:
+      95: 9500000
+    second: //RootNode
+  - first:
+      137: 13700000
+    second: Animated Door
+  externalObjects: {}
   materials:
-    importMaterials: 1
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
+    extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
       name: Shed_DoorBreakDown
       takeName: Take 001
+      internalID: 0
       firstFrame: 0
       lastFrame: 95
       wrapMode: 0
@@ -52,6 +106,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
+      hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -84,9 +139,11 @@ ModelImporter:
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     - serializedVersion: 16
       name: Shed_DoorOpen
       takeName: Take 001
+      internalID: 0
       firstFrame: 95
       lastFrame: 125
       wrapMode: 0
@@ -94,6 +151,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
+      hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -126,44 +184,78 @@ ModelImporter:
         weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 0
+    importVisibility: 0
     importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 4
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
-  copyAvatar: 0
   humanDescription:
+    serializedVersion: 3
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 
