@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3161216687494497618}
   - component: {fileID: 3759993292453570721}
   m_Layer: 0
-  m_Name: HiddenWall
+  m_Name: HiddenWallNoColliderThird
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,4 +121,4 @@ MonoBehaviour:
   cameraSwitcher: {fileID: 0}
   firstPersonMaterial: {fileID: 2100000, guid: 29dd1be3bcea11d45891ee0c38d4d5a8, type: 2}
   thirdPersonMaterial: {fileID: 2100000, guid: 719e0be2bcffa954f9b323ce09e009f9, type: 2}
-  toggleCollider: 1
+  NocolliderMode: 1

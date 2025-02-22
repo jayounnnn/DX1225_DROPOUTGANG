@@ -15,6 +15,8 @@ public class MazeGenerator : MonoBehaviour
     public GameObject wallPrefab;  
     public GameObject floorPrefab;
     public GameObject hiddenWallPrefab;
+    public GameObject hiddenWallPrefab2;
+
     public GameObject endObjectPrefab;
 
     [Range(0f, 1f)]
@@ -193,36 +195,42 @@ public class MazeGenerator : MonoBehaviour
                 }
 
 
+                // TOP
                 if (!cell.wallTop && Random.value < hiddenWallChance)
                 {
                     Vector3 hiddenPos = cellPos + new Vector3(0, 0.5f, cellSize / 2f);
-                    GameObject hiddenWall = Instantiate(hiddenWallPrefab, hiddenPos, Quaternion.identity);
+                    GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
+                    GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.identity);
                     hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
 
-                
-
+                // BOTTOM
                 if (!cell.wallBottom && Random.value < hiddenWallChance)
                 {
                     Vector3 hiddenPos = cellPos + new Vector3(0, 0.5f, -cellSize / 2f);
-                    GameObject hiddenWall = Instantiate(hiddenWallPrefab, hiddenPos, Quaternion.identity);
+                    GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
+                    GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.identity);
                     hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
 
+                // LEFT
                 if (!cell.wallLeft && Random.value < hiddenWallChance)
                 {
                     Vector3 hiddenPos = cellPos + new Vector3(-cellSize / 2f, 0.5f, 0);
-                    GameObject hiddenWall = Instantiate(hiddenWallPrefab, hiddenPos, Quaternion.Euler(0, 90, 0));
+                    GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
+                    GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.Euler(0, 90, 0));
                     hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
 
+                // RIGTH
                 if (!cell.wallRight && Random.value < hiddenWallChance)
                 {
                     Vector3 hiddenPos = cellPos + new Vector3(cellSize / 2f, 0.5f, 0);
-                    GameObject hiddenWall = Instantiate(hiddenWallPrefab, hiddenPos, Quaternion.Euler(0, 90, 0));
+                    GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
+                    GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.Euler(0, 90, 0));
                     hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
