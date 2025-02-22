@@ -29,11 +29,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: effabd1f19f48cc45bbe33a9c6ff9238, type: 3}
+        m_Texture: {fileID: 2800000, guid: fe87befabef34b940abdd430777a08d4, type: 3}
         m_Scale: {x: 0.2, y: 0.2}
         m_Offset: {x: -0.88, y: 0}
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: ea68bf24910ef3d43a3e95d2189ebcce, type: 3}
+        m_Texture: {fileID: 2800000, guid: 40db45dd094ffb043b3eb6b168e48c35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -53,19 +53,19 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: effabd1f19f48cc45bbe33a9c6ff9238, type: 3}
+        m_Texture: {fileID: 2800000, guid: fe87befabef34b940abdd430777a08d4, type: 3}
         m_Scale: {x: 0.2, y: 0.2}
         m_Offset: {x: -0.88, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 31f96d18af56dee40a68a9121e6354d6, type: 3}
+        m_Texture: {fileID: 2800000, guid: 9f4c75337dd4b274093ee2edccdfb721, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: 69baeff6211b9014f83b2579669b03ed, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1ede54107f4c0d44288ed72bd19a355f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
-        m_Texture: {fileID: 2800000, guid: c7a3429999d5d434189f347a2ae8cd56, type: 3}
+        m_Texture: {fileID: 2800000, guid: 54179ff86751ad846acc2a87e6ccf40c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -105,10 +105,10 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _Parallax: 0.0153
+    - _Parallax: 0.005
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.391
+    - _Smoothness: 0.52
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -117,8 +117,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 0.6320754, g: 0.58139014, b: 0.58139014, a: 1}
+    - _Color: {r: 0.6320754, g: 0.58139014, b: 0.58139014, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
