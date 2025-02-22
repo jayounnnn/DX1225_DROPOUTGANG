@@ -10,6 +10,7 @@ public class Rock : MonoBehaviour
     [SerializeField]private float maxTravelDistance = 10f;
 
     private Vector3 startPosition;
+    private GameObject rockItemPrefab;
 
     private void Start()
     {
@@ -21,7 +22,12 @@ public class Rock : MonoBehaviour
         rb.useGravity = true;
         rb.isKinematic = false;
 
-        startPosition = transform.position; 
+        startPosition = transform.position;
+        rockItemPrefab = InventoryManager.instance.GetItemPrefab("RockItem");
+        if (rockItemPrefab == null)
+        {
+            Debug.LogError("RockItem prefab not found in InventoryManager!");
+        }
     }
 
     public void Initialize(Vector3 playerPosition, Vector3 direction)
@@ -42,20 +48,6 @@ public class Rock : MonoBehaviour
         // Calculate the arc trajectory (forward + upward force)
         Vector3 throwDirection = direction.normalized * throwForce + Vector3.up * arcForce;
         rb.AddForce(throwDirection, ForceMode.Impulse); // Use Impulse for immediate physics effect
-
-        // Start tracking travel distance
-        StartCoroutine(DestroyAfterDistance());
-    }
-
-    private IEnumerator DestroyAfterDistance()
-    {
-        while (Vector3.Distance(startPosition, transform.position) < maxTravelDistance)
-        {
-            yield return null;
-        }
-
-        Debug.Log("Rock reached max distance and disappeared.");
-        Destroy(gameObject);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -69,7 +61,19 @@ public class Rock : MonoBehaviour
                 Debug.Log("Enemy hit! Stunned.");
             }
         }
-
+        else
+        {
+            // Spawn RockItem at collision point
+            if (rockItemPrefab != null)
+            {
+                Instantiate(rockItemPrefab, transform.position, Quaternion.identity);
+                Debug.Log("Spawned RockItem at " + transform.position);
+            }
+            else
+            {
+                Debug.LogError("RockItem prefab is null! Check InventoryManager.");
+            }
+        }
         // Destroy rock after collision (regardless of what it hit)
         Destroy(gameObject);
     }
