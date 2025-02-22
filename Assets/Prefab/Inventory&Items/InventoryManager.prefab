@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4329997858903853067}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 10.574585, y: 1.3447266, z: -6.542663}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -56,15 +56,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   inventoryUI: {fileID: 0}
-  flashlightPanel: {fileID: 0}
-  hotbarPanel: {fileID: 0}
-  flashlightBtn: {fileID: 0}
-  hotbarBtn: {fileID: 0}
   itemPrefabs:
   - {fileID: 168528, guid: 9e449e64357fb4e4b8f6a73b40377ca8, type: 3}
   - {fileID: 125220, guid: b69b182e2808ee94d9e7cd648177cf6c, type: 3}
   - {fileID: 8523652501870684006, guid: e1b4a6cceefc9d347975715c12b1fcd4, type: 3}
   - {fileID: 162168, guid: cc34854c0aa015547b63cc8d985607e8, type: 3}
   - {fileID: 190318, guid: d4ae36aac36de594a8e4144cb97de5c2, type: 3}
-  - {fileID: 7145037408712870186, guid: 0df32750bee93a84c8f020aac16d8476, type: 3}
-  - {fileID: 3735831034535419941, guid: 26bc9ded1e63b264cafbdea56c09657f, type: 3}
