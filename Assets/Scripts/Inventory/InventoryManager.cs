@@ -107,13 +107,13 @@ public class InventoryManager : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            Time.timeScale = 0f; // Pause game
+            //Time.timeScale = 0f; // Pause game
         }
         else
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            Time.timeScale = 1f; // Resume game
+            //Time.timeScale = 1f; // Resume game
         }
     }
 }

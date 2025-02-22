@@ -6,6 +6,7 @@ public class Consumable : MonoBehaviour
 {
     public Item item;
     public bool isInHotbar = false;
+    private GameObject rockPrefab;
 
     private void Start()
     {
@@ -16,6 +17,15 @@ public class Consumable : MonoBehaviour
             {
                 isInHotbar = true;
                 break;
+            }
+        }
+        // Load the rock prefab from assets if the item is a Rock
+        if (item.itemName == "RockItem")
+        {
+            rockPrefab = InventoryManager.instance.GetItemPrefab("Rock");
+            if (rockPrefab == null)
+            {
+                Debug.LogError("Rock prefab not found in InventoryManager!");
             }
         }
     }
@@ -41,7 +51,37 @@ public class Consumable : MonoBehaviour
                 }
             }
         }
+        else if (item.itemName == "RockItem")
+        {
+            ThrowRock();
+        }
+
         Destroy(gameObject);
+    }
+
+    private void ThrowRock()
+    {
+        if (rockPrefab == null)
+        {
+            Debug.LogError("Rock prefab is not assigned in InventoryManager!");
+            return;
+        }
+
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player == null) return;
+
+        Vector3 spawnPosition = player.transform.position + player.transform.forward + Vector3.up * 1.5f;
+        GameObject rock = Instantiate(rockPrefab, spawnPosition, Quaternion.identity);
+
+        Rock rockScript = rock.GetComponent<Rock>();
+        if (rockScript == null)
+        {
+            Debug.LogError("Rock script is missing on Rock prefab!");
+            return;
+        }
+        rockScript.Initialize(player.transform.position, player.transform.forward);
+
+        Debug.Log("Threw a rock!");
     }
 }
 //Add this to Player controller
