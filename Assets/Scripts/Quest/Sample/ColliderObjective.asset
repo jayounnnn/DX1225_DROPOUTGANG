@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2a42148c0d4984488d28170c75b6026, type: 3}
   m_Name: ColliderObjective
   m_EditorClassIdentifier: 
-  description: 
+  description: Collide With the Cylinder
   isCompleted: 0
-  colliderName: 
+  colliderName: TestCollider

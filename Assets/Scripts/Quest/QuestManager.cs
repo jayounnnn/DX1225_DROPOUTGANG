@@ -5,8 +5,8 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 {
     public List<Quest> activeQuests;
-
     public float questCompletionDelay = 1.0f;
+    public float newQuestAdditionDelay = 1.0f; 
 
     private HashSet<Quest> questsScheduledForRemoval = new HashSet<Quest>();
 
@@ -28,18 +28,22 @@ public class QuestManager : MonoBehaviour
     {
         yield return new WaitForSeconds(questCompletionDelay);
 
-        //Debug.Log("Quest Completed: " + quest.questName);
-
         ResetQuest(quest);
 
         if (quest.nextQuest != null && !activeQuests.Contains(quest.nextQuest))
         {
-            //Debug.Log("New Quest Unlocked: " + quest.nextQuest.questName);
-            activeQuests.Add(quest.nextQuest);
+            StartCoroutine(AddNewQuestAfterDelay(quest.nextQuest));
         }
 
         activeQuests.Remove(quest);
         questsScheduledForRemoval.Remove(quest);
+    }
+
+    IEnumerator AddNewQuestAfterDelay(Quest nextQuest)
+    {
+
+        yield return new WaitForSeconds(newQuestAdditionDelay);
+        activeQuests.Add(nextQuest);
     }
 
     void ResetQuest(Quest quest)

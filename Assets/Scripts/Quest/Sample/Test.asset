@@ -18,5 +18,5 @@ MonoBehaviour:
 '
   objectives:
   - {fileID: 11400000, guid: 12b0e4b424ae5c04da94d2a49ecc5c48, type: 2}
-  - {fileID: 11400000, guid: b88986216ed5f0d44abb5229e7dcfeaf, type: 2}
+  - {fileID: 11400000, guid: 7d84e2970b8c9b541ab51570fb6a187e, type: 2}
   nextQuest: {fileID: 11400000, guid: 8a37f8465dc9f014fa7555dc401f3399, type: 2}
