@@ -6,6 +6,9 @@ public abstract class EnemyBase : Damageable // Now inherits from Damageable
     public int damage = 10;
     public bool isInvincible = false;
 
+    [Header("Investigation Settings")]
+    public float investigationRadius = 5f; // Radius to detect thrown objects
+
     protected Animator animator;
     protected Rigidbody rb;
     protected EnemyStateMachine stateMachine;
@@ -43,6 +46,12 @@ public abstract class EnemyBase : Damageable // Now inherits from Damageable
         {
             OnDestroyed();
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, investigationRadius);
     }
 
     protected abstract void Attack();
