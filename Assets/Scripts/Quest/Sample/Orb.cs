@@ -23,7 +23,7 @@ public class Orb : MonoBehaviour
                         // If the objective is a CollectItemObjective, add to its count.
                         if (objective is CollectItemObjective collectObjective)
                         {
-                            collectObjective.AddItem(orbValue);
+                            collectObjective.AddItem("Orb",orbValue);
                         }
                     }
                 }

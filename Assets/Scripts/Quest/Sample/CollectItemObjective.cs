@@ -5,15 +5,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CollectItemObjective", menuName = "Quests/Objectives/Collect Item")]
 public class CollectItemObjective : QuestObjective
 {
+    public string itemName;
     public int requiredAmount = 5;
     public int currentAmount = 0;
-    public void AddItem(int amount = 1)
+    public void AddItem(string item, int amount = 1)
     {
-        currentAmount += amount;
-        if (currentAmount >= requiredAmount)
+        if (item == itemName)
         {
-            isCompleted = true;
-        }
+            currentAmount += amount;
+            if (currentAmount >= requiredAmount)
+            {
+                isCompleted = true;
+            }
+        }  
     }
 
     public override bool CheckCompletion()

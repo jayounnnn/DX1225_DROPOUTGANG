@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: "Collect 5 Orbs\n "
   isCompleted: 0
+  itemName: Orb
   requiredAmount: 5
   currentAmount: 0
