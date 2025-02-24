@@ -105,7 +105,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _LightScattering: 0.456
-    - _MaxDistance: 100
+    - _MaxDistance: 0
     - _Metallic: 0
     - _NoiseOffset: 0
     - _NoiseTiling: 1
