@@ -24,6 +24,9 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
     [SerializeField] private ElectricalBox electricalBox;
 
     [SerializeField] private GameObject wireDragUIPrefab;
+    [SerializeField] private GameObject completionMessageUI;
+    [SerializeField] private GameObject mismatchMessageUI;
+    [SerializeField] private float messageDuration = 2f;
     private GameObject activeWireDragUI; // Currently active UI panel
 
     void Start()
@@ -99,20 +102,26 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 wireRect.anchoredPosition = closestRightPoint.GetComponent<RectTransform>().anchoredPosition;
             }
+
+            // Create a permanent wire UI connection
+            CreateWireConnectionUI(selectedWire);
         }
-
-        selectedWire.isDragging = false;
-        selectedWire = null;
-
-        // Destroy UI dragging panel
+        else
+        {
+            ShowMismatchMessage();
+        }
         if (activeWireDragUI != null)
         {
             Destroy(activeWireDragUI);
             activeWireDragUI = null;
         }
 
+        selectedWire.isDragging = false;
+        selectedWire = null;
+
         CheckIfAllWiresConnected();
     }
+
 
     private Transform GetClosestRightPoint(WireConnection wire, Vector2 screenPosition)
     {
@@ -121,12 +130,7 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         foreach (var connection in wireConnections)
         {
-            //if (connection.leftPoint == wire.leftPoint) continue; // Skip same-side wires
-
-            // Only consider rightPoints with the same wire color
-            if (connection.wireColorType != wire.wireColorType) continue;
-
-            // Convert world positions to UI screen positions
+            //Allow checking all right points (no longer restricting to same-pair)
             Vector2 rightPointScreenPos = RectTransformUtility.WorldToScreenPoint(null, connection.rightPoint.position);
             float distance = Vector2.Distance(screenPosition, rightPointScreenPos);
 
@@ -137,15 +141,6 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
             }
         }
 
-        if (closest != null)
-        {
-            Debug.Log($"Found closest right point for {wire.wireColorType}");
-        }
-        else
-        {
-            Debug.LogError($"No matching right point found for {wire.wireColorType}!");
-        }
-
         return closest;
     }
 
@@ -154,7 +149,7 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         WireConnection targetWire = wireConnections.Find(w => w.rightPoint == rightPoint);
 
-        if (targetWire != null)
+        if (targetWire != null && wire.leftPoint == targetWire.leftPoint)
         {
             Debug.Log($"Checking wire {wire.wireColorType} with {targetWire.wireColorType}");
 
@@ -162,13 +157,63 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
             if (wire.wireColorType == targetWire.wireColorType)
             {
                 Debug.Log("Correct wire connected!");
+                if (mismatchMessageUI != null)
+                {
+                    HideMismatchMessage();
+                }
                 return true;
             }
         }
 
-        Debug.Log("Incorrect wire connection!");
+        ShowMismatchMessage();
         return false;
     }
+
+    private void CreateWireConnectionUI(WireConnection wire)
+    {
+        if (wire.leftPoint != null && wire.rightPoint != null)
+        {
+            // Create a new UI wire connection
+            GameObject wireConnectionUI = Instantiate(wireDragUIPrefab, minigamePanel.transform);
+            Image uiImage = wireConnectionUI.GetComponent<Image>();
+
+            if (uiImage != null)
+            {
+                uiImage.color = GetColorFromEnum(wire.wireColorType);
+            }
+
+            // Set the wire's position and size
+            RectTransform wireRect = wireConnectionUI.GetComponent<RectTransform>();
+            Vector2 leftScreenPos = RectTransformUtility.WorldToScreenPoint(null, wire.leftPoint.position);
+            Vector2 rightScreenPos = RectTransformUtility.WorldToScreenPoint(null, wire.rightPoint.position);
+
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(minigamePanel.GetComponent<RectTransform>(), leftScreenPos, null, out Vector2 localLeftPos);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(minigamePanel.GetComponent<RectTransform>(), rightScreenPos, null, out Vector2 localRightPos);
+
+            wireRect.anchoredPosition = (localLeftPos + localRightPos) / 2; // Position in between
+            wireRect.sizeDelta = new Vector2(Vector2.Distance(localLeftPos, localRightPos), 10); // Set wire width
+            wireRect.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(localRightPos.y - localLeftPos.y, localRightPos.x - localLeftPos.x) * Mathf.Rad2Deg);
+
+            Debug.Log($"Created wire UI between {wire.leftPoint.name} and {wire.rightPoint.name}");
+        }
+    }
+
+    private void ShowMismatchMessage()
+    {
+        if (mismatchMessageUI != null)
+        {
+            mismatchMessageUI.SetActive(true);
+        }
+    }
+
+    private void HideMismatchMessage()
+    {
+        if (mismatchMessageUI != null)
+        {
+            mismatchMessageUI.SetActive(false);
+        }
+    }
+
 
     private Color GetColorFromEnum(WireColorType wireColorType)
     {
@@ -189,9 +234,15 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
         {
             if (!wire.isConnected) return;
         }
-
-        Debug.Log("All wires connected! Minigame complete.");
-        CloseMinigame();
+        //Update UI
+        if (mismatchMessageUI != null)
+        {
+            mismatchMessageUI.SetActive(false);
+        }
+        if (completionMessageUI != null)
+        {
+            completionMessageUI.SetActive(true);
+        }
 
         //Open door
         if (door != null)
