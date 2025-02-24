@@ -27,6 +27,8 @@ public class testEnemyMovement : EnemyBase
     private float raycastHeight = 1.5f; // Height for raycasts
 
     private NavMeshAgent agent;
+    private Vector3 lastThrowablePosition;
+    private bool hasThrowableTarget = false;
 
     protected override void Start()
     {
@@ -59,6 +61,13 @@ public class testEnemyMovement : EnemyBase
 
     private void Update()
     {
+
+        if (hasThrowableTarget)
+        {
+            MoveToThrowablePosition();
+            return;
+        }
+
         // Check for player detection
         if (DetectPlayerWithRaycast())
         {
@@ -94,6 +103,30 @@ public class testEnemyMovement : EnemyBase
             return;
         }
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Throwable"))
+        {
+            lastThrowablePosition = other.transform.position;
+            hasThrowableTarget = true;
+            Debug.Log(name + " detected a throwable at " + lastThrowablePosition);
+        }
+    }
+
+    private void MoveToThrowablePosition()
+    {
+        agent.SetDestination(lastThrowablePosition);
+
+        // Check if enemy has reached the throwable's location
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            hasThrowableTarget = false; // Reset flag
+            Debug.Log(name + " has reached the throwable's location. Preparing to inspect.");
+
+            stateMachine.ChangeState(new PatrolState(this, stateMachine)); // Placeholder
+        }
     }
 
     private Transform DetectPlayerWithConeCast()

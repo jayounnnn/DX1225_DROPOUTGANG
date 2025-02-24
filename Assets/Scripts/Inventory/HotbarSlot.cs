@@ -16,33 +16,6 @@ public class HotbarSlot : MonoBehaviour, IDropHandler
         hotbarItemUI.enabled = false;
     }
 
-    public void OnDrop(PointerEventData eventData)
-    {
-        // Prevent multiple items in one slot
-        if (transform.childCount > 0)
-        {
-            Debug.Log("Hotbar slot is already occupied!");
-            return;
-        }
-
-        GameObject dropped = eventData.pointerDrag;
-        DraggableItem draggableItem = dropped.GetComponent<DraggableItem>();
-
-        // Ensure the item is not a battery
-        Item item = InventoryManager.instance.items.Find(i => i.itemName == dropped.name);
-        if (item != null && item.itemType == ItemType.Battery)
-        {
-            Debug.Log("Batteries cannot be placed in the Hotbar!");
-            return;
-        }
-
-        // Assign item to slot
-        draggableItem.parentAfterDrag = transform;
-
-        // Update the hotbar UI panel
-        UpdateHotbarUI(item.icon);
-    }
-
     private void Update()
     {
         if (transform.childCount == 0)
@@ -71,9 +44,58 @@ public class HotbarSlot : MonoBehaviour, IDropHandler
                             consumable.isInHotbar = true;
                         }
                     }
+                    //else if(item.itemType == ItemType.QuestItem && item.itemName == "Key")
+                    //{
+                    //    TryOpenDoor(itemInSlot);
+                    //}
                 }
             }
         }
+    }
+        
+    public void OnDrop(PointerEventData eventData)
+    {
+        // Prevent multiple items in one slot
+        if (transform.childCount > 0)
+        {
+            Debug.Log("Hotbar slot is already occupied!");
+            return;
+        }
+
+        GameObject dropped = eventData.pointerDrag;
+        DraggableItem draggableItem = dropped.GetComponent<DraggableItem>();
+
+        // Ensure the item is not a battery
+        Item item = InventoryManager.instance.items.Find(i => i.itemName == dropped.name);
+        if (item != null && item.itemType == ItemType.Battery)
+        {
+            Debug.Log("Batteries cannot be placed in the Hotbar!");
+            return;
+        }
+
+        // Assign item to slot
+        draggableItem.parentAfterDrag = transform;
+
+        // Update the hotbar UI panel
+        UpdateHotbarUI(item.icon);
+    }
+
+    public void TryOpenDoor(Transform itemInSlot)
+    {
+        // Find a door that uses the key method
+        Door[] doors = FindObjectsOfType<Door>();
+        foreach (Door door in doors)
+        {
+            if (door.openMethod == Door.DoorOpenMethod.Key && !door.isOpen && door.PlayerIsNearby())
+            {
+                door.OpenDoor();
+                Destroy(itemInSlot.gameObject); // Remove the key from the hotbar
+                Debug.Log("Used key to open the door!");
+                return;
+            }
+        }
+
+        Debug.Log("No door requires a key nearby!");
     }
 
     public void UpdateHotbarUI(Sprite itemIcon)
