@@ -20215,32 +20215,6 @@ Transform:
   - {fileID: 1045650490}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1915858131 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5079495356166380843, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
-  m_PrefabInstance: {fileID: 6092898431843076620}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1915858139
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1915858131}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 5, y: 3, z: 5}
-  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!43 &1928008075
 Mesh:
   m_ObjectHideFlags: 0
@@ -33663,14 +33637,6 @@ PrefabInstance:
       value: Enemy Navmesh test
       objectReference: {fileID: 0}
     - target: {fileID: 5974253155257172079, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
-      propertyPath: isInvincible
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5974253155257172079, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
-      propertyPath: waypoints.Array.size
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5974253155257172079, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
       propertyPath: waypoints.Array.data[0]
       value: 
       objectReference: {fileID: 574207474}
@@ -33706,17 +33672,10 @@ PrefabInstance:
       propertyPath: waypoints.Array.data[8]
       value: 
       objectReference: {fileID: 1045650490}
-    - target: {fileID: 7230598700671317964, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
-      propertyPath: maxDistance
-      value: 5
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5079495356166380843, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1915858139}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

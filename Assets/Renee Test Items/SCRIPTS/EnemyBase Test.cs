@@ -48,12 +48,6 @@ public abstract class EnemyBase : Damageable // Now inherits from Damageable
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, investigationRadius);
-    }
-
     protected abstract void Attack();
 
     public void PerformAttack()
