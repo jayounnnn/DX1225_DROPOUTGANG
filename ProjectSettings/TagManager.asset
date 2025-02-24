@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Tree
+  - Throwable
+  - Enemy
+  - Wall
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - Target
   - Movable
   - Player
-  - 
+  - Arm
   - 
   - 
   - 
