@@ -260,18 +260,30 @@ public class PlayerController : Damageable
         if (hotbarSlots[slotIndex].transform.childCount > 0) // Check if slot has an item
         {
             Transform itemInSlot = hotbarSlots[slotIndex].transform.GetChild(0);
-            Consumable consumable = itemInSlot.GetComponent<Consumable>();
+            Item item = InventoryManager.instance.items.Find(i => i.itemName == itemInSlot.name);
 
-            if (consumable != null)
+            if (item != null)
             {
-                Debug.Log("Using consumable from Hotbar Slot " + (slotIndex + 1));
-                consumable.UseConsumable();
-                //Update UI after consuming the item
-                hotbarSlots[slotIndex].RemoveItem();
-            }
-            else
-            {
-                Debug.Log("Item in Hotbar Slot " + (slotIndex + 1) + " is not a consumable.");
+                if (item.itemType == ItemType.Consumable)
+                {
+                    // Use consumable item
+                    Consumable consumable = itemInSlot.GetComponent<Consumable>();
+                    if (consumable != null)
+                    {
+                        Debug.Log("Using consumable from Hotbar Slot " + (slotIndex + 1));
+                        consumable.UseConsumable();
+                        hotbarSlots[slotIndex].RemoveItem();
+                    }
+                }
+                else if (item.itemType == ItemType.QuestItem && item.itemName == "Key")
+                {
+                    hotbarSlots[slotIndex].TryOpenDoor(itemInSlot);
+                    hotbarSlots[slotIndex].RemoveItem();
+                }
+                else
+                {
+                    Debug.Log("Item in Hotbar Slot " + (slotIndex + 1) + " is not usable.");
+                }
             }
         }
         else
