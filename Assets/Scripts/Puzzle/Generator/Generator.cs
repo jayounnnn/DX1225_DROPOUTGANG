@@ -24,6 +24,10 @@ public class Generator : MonoBehaviour
 
     void Start()
     {
+        if (cameraSwitcher == null)
+        {
+            cameraSwitcher = FindAnyObjectByType<CameraSwitcher>();
+        }
         if (progressBar != null)
             progressBar.gameObject.SetActive(false);
         if (quickTimeBox != null)

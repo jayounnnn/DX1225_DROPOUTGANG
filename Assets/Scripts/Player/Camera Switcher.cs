@@ -8,6 +8,8 @@ public class CameraSwitcher : MonoBehaviour
     public CinemachineVirtualCamera firstPersonCamera;
     public CinemachineFreeLook thirdPersonCamera;
 
+    public PlayerMovement playermovement;
+
     public GameObject characterModel;
     public GameObject RightArm;
 
@@ -29,6 +31,8 @@ public class CameraSwitcher : MonoBehaviour
             meshRenderers = characterModel.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         animator = characterModel.GetComponent<Animator>();
+
+        playermovement = characterModel.GetComponent<PlayerMovement>();
 
         SetFirstPerson();
     }
@@ -109,6 +113,7 @@ public class CameraSwitcher : MonoBehaviour
         {
             previousIsFirstPerson = isFirstPerson;
             temporarySwitchActive = true;
+            playermovement.Reset();
             SetFirstPerson();
         }
     }
