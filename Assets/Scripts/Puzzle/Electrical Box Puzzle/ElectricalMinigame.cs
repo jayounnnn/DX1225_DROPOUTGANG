@@ -19,10 +19,11 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
     public List<WireConnection> wireConnections;
     private WireConnection selectedWire;
 
-    public GameObject minigamePanel;
-    public ElectricalBox electricalBox;
+    [SerializeField] private Door door;
+    [SerializeField] private GameObject minigamePanel;
+    [SerializeField] private ElectricalBox electricalBox;
 
-    public GameObject wireDragUIPrefab; // UI panel prefab for dragging wire
+    [SerializeField] private GameObject wireDragUIPrefab;
     private GameObject activeWireDragUI; // Currently active UI panel
 
     void Start()
@@ -191,6 +192,12 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
 
         Debug.Log("All wires connected! Minigame complete.");
         CloseMinigame();
+
+        //Open door
+        if (door != null)
+        {
+            door.OpenDoor();
+        }
     }
 
     public void ResetMinigame()
