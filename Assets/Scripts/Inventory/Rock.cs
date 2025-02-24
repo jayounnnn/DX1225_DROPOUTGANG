@@ -11,6 +11,7 @@ public class Rock : MonoBehaviour
 
     private Vector3 startPosition;
     private GameObject rockItemPrefab;
+    private bool hasDropped = false;
 
     private void Start()
     {
@@ -61,20 +62,31 @@ public class Rock : MonoBehaviour
                 Debug.Log("Enemy hit! Stunned.");
             }
         }
+        else if (collision.gameObject.CompareTag("Ground"))
+        {
+            hasDropped = true;
+            SpawnRockItem();            
+        }
         else
         {
-            // Spawn RockItem at collision point
-            if (rockItemPrefab != null)
-            {
-                Instantiate(rockItemPrefab, transform.position, Quaternion.identity);
-                Debug.Log("Spawned RockItem at " + transform.position);
-            }
-            else
-            {
-                Debug.LogError("RockItem prefab is null! Check InventoryManager.");
-            }
+            rb.velocity = Vector3.zero;
+            rb.useGravity = true;
+            Debug.Log("Rock hit a Wall! Dropping to ground.");
         }
-        // Destroy rock after collision (regardless of what it hit)
-        Destroy(gameObject);
+    }
+
+    private void SpawnRockItem()
+    {
+        if (rockItemPrefab != null)
+        {
+            Instantiate(rockItemPrefab, transform.position, Quaternion.identity);
+            Debug.Log("Spawned RockItem at " + transform.position);
+        }
+        else
+        {
+            Debug.LogError("RockItem prefab is null! Check InventoryManager.");
+        }
+
+        Destroy(gameObject); // Remove the thrown rock
     }
 }

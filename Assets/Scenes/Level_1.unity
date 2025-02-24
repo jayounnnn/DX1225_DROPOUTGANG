@@ -21932,6 +21932,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1688634212}
+    - target: {fileID: 59671990026884457, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 66990918064228847, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -23144,6 +23148,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 6.756
       objectReference: {fileID: 0}
+    - target: {fileID: 2787290932143347899, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 2804928868951031145, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -23172,6 +23180,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1081343630}
+    - target: {fileID: 2975528048827563229, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     - target: {fileID: 2976076309728472445, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.9061246
@@ -23211,6 +23223,10 @@ PrefabInstance:
     - target: {fileID: 2976076309728472445, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3007912471585757900, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 3032878279179288811, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
@@ -23395,6 +23411,10 @@ PrefabInstance:
     - target: {fileID: 3684560762889561266, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_VersionIndex
       value: 2229
+      objectReference: {fileID: 0}
+    - target: {fileID: 3708572058166230565, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 3715111971164505037, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -24524,6 +24544,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1971069706}
+    - target: {fileID: 5737716933468851081, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 5742189642248312401, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -25339,6 +25363,10 @@ PrefabInstance:
     - target: {fileID: 7008086030751279967, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Textures0.Array.data[19].y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7012271541187344376, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 7068855248435664853, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_LocalScale.x
@@ -32344,6 +32372,10 @@ PrefabInstance:
       propertyPath: m_Tangents.Array.data[78].y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8702561028484642527, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 8708087611161135904, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -32368,6 +32400,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 5a86af623e5fef143b6c2beda952644d, type: 2}
+    - target: {fileID: 8805048872370659241, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 8809414445154730387, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -32380,6 +32416,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 1ab6efd11da795f41be1e0acc33b286b, type: 2}
+    - target: {fileID: 8837842098493611849, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 8887533778641081325, guid: d7479c66b6a893e4c94cdf728767b9d0, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -33635,6 +33675,10 @@ PrefabInstance:
     - target: {fileID: 5079495356166380843, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
       propertyPath: m_Name
       value: Enemy Navmesh test
+      objectReference: {fileID: 0}
+    - target: {fileID: 5079495356166380843, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 5974253155257172079, guid: 599510e1641e3ea4f8aae36cd0645a6e, type: 3}
       propertyPath: waypoints.Array.data[0]

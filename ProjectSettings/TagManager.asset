@@ -8,6 +8,7 @@ TagManager:
   - Throwable
   - Enemy
   - Wall
+  - Ground
   layers:
   - Default
   - TransparentFX
