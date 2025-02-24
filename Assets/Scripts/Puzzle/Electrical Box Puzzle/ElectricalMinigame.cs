@@ -19,6 +19,8 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
     public List<WireConnection> wireConnections;
     private WireConnection selectedWire;
 
+    [SerializeField] public string QuestID;
+
     [SerializeField] private Door door;
     [SerializeField] private GameObject minigamePanel;
     [SerializeField] private ElectricalBox electricalBox;
@@ -244,10 +246,33 @@ public class ElectricalMinigame : MonoBehaviour, IBeginDragHandler, IDragHandler
             completionMessageUI.SetActive(true);
         }
 
+        CollectItem();
+
         //Open door
         if (door != null)
         {
             door.OpenDoor();
+        }
+    }
+
+    private void CollectItem()
+    {
+        QuestManager questManager = FindObjectOfType<QuestManager>();
+
+        if (questManager != null)
+        {
+            foreach (Quest quest in questManager.activeQuests)
+            {
+                foreach (QuestObjective objective in quest.objectives)
+                {
+                    if (objective is CollectItemObjective collectObjective && collectObjective.itemName == QuestID)
+                    {
+                        collectObjective.AddItem(QuestID, 1);
+                        Debug.Log("Collected " + 1 + " of " + 0);
+                        return;
+                    }
+                }
+            }
         }
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PickupItem : MonoBehaviour
 {
+    public string QuestID;
     public Item item;
     public bool isPlayerNearby = false;
     private BillBoard billBoard;
@@ -49,6 +50,28 @@ public class PickupItem : MonoBehaviour
 
         //Add Item to Inventory
         InventoryManager.instance.AddItem(item);
+        CollectItem(QuestID);
         Destroy(gameObject);
+    }
+
+    private void CollectItem(string name)
+    {
+        QuestManager questManager = FindObjectOfType<QuestManager>();
+
+        if (questManager != null)
+        {
+            foreach (Quest quest in questManager.activeQuests)
+            {
+                foreach (QuestObjective objective in quest.objectives)
+                {
+                    if (objective is CollectItemObjective collectObjective && collectObjective.itemName == name)
+                    {
+                        collectObjective.AddItem(name, 1);
+                        Debug.Log("Collected " + 1 + " of " + name);
+                        return;
+                    }
+                }
+            }
+        }
     }
 }
