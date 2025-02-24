@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class WallToggle : MonoBehaviour
 {
-
     public CameraSwitcher cameraSwitcher;
-
     public Material firstPersonMaterial;
-
     public Material thirdPersonMaterial;
 
-
-    public bool toggleCollider = true;
+    public enum ColliderMode { FirstPerson, ThirdPerson }
+    public ColliderMode NocolliderMode = ColliderMode.FirstPerson;
 
     private Collider objectCollider;
     private Renderer objectRenderer;
@@ -35,23 +32,14 @@ public class WallToggle : MonoBehaviour
 
         bool isFirstPerson = cameraSwitcher.IsFirstPerson;
 
-        if (toggleCollider && objectCollider != null)
+        if (objectCollider != null)
         {
-            objectCollider.enabled = isFirstPerson;
+            objectCollider.enabled = (NocolliderMode == ColliderMode.FirstPerson) ? !isFirstPerson : isFirstPerson;
         }
 
         if (objectRenderer != null)
         {
-            if (isFirstPerson)
-            {
-                if (firstPersonMaterial != null)
-                    objectRenderer.material = firstPersonMaterial;
-            }
-            else
-            {
-                if (thirdPersonMaterial != null)
-                    objectRenderer.material = thirdPersonMaterial;
-            }
+            objectRenderer.material = isFirstPerson ? firstPersonMaterial : thirdPersonMaterial;
         }
     }
 }

@@ -138,6 +138,7 @@ public class PlayerController : Damageable
 
         if (_cameraSwitcher.IsFirstPerson)
         {
+            //_animator.enabled = false;
             _playerMovement.Reset();
             _firstPersonMovement.Move(moveInput, IsRunning, isCrouching);
             _firstPersonMovement.Jump(jumpPressed);
@@ -146,6 +147,7 @@ public class PlayerController : Damageable
         }
         else
         {
+           // _animator.enabled = enabled;
             _playerMovement.ProcessMovement(moveInput, IsRunning, isCrouching);
             ProcessJump(jumpPressed);
 
