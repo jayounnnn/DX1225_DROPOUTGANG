@@ -20,6 +20,9 @@ public class CameraSwitcher : MonoBehaviour
 
     public bool IsFirstPerson => isFirstPerson;
 
+    private bool temporarySwitchActive = false;
+    private bool previousIsFirstPerson;
+
     void Start()
     {
         if (characterModel != null)
@@ -100,5 +103,25 @@ public class CameraSwitcher : MonoBehaviour
         }
     }
 
+    public void EnterTemporaryFirstPerson()
+    {
+        if (!isFirstPerson)
+        {
+            previousIsFirstPerson = isFirstPerson;
+            temporarySwitchActive = true;
+            SetFirstPerson();
+        }
+    }
 
+    public void ExitTemporaryFirstPerson()
+    {
+        if (temporarySwitchActive)
+        {
+            if (!previousIsFirstPerson)
+                SetThirdPerson();
+            else
+                SetFirstPerson();
+            temporarySwitchActive = false;
+        }
+    }
 }
