@@ -5,6 +5,10 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 {
     public List<Quest> activeQuests;
+    public float questCompletionDelay = 1.0f;
+    public float newQuestAdditionDelay = 1.0f; 
+
+    private HashSet<Quest> questsScheduledForRemoval = new HashSet<Quest>();
 
     void Update()
     {
@@ -12,24 +16,34 @@ public class QuestManager : MonoBehaviour
 
         foreach (var quest in questsToCheck)
         {
-            if (quest.IsQuestCompleted())
+            if (quest.IsQuestCompleted() && !questsScheduledForRemoval.Contains(quest))
             {
-                Debug.Log("Quest Completed: " + quest.questName);
-
-                ResetQuest(quest);
-
-                if (quest.nextQuest != null)
-                {
-                    if (!activeQuests.Contains(quest.nextQuest))
-                    {
-                        Debug.Log("New Quest Unlocked: " + quest.nextQuest.questName);
-                        activeQuests.Add(quest.nextQuest);
-                    }
-                }
-
-                activeQuests.Remove(quest);
+                StartCoroutine(DelayedQuestCompletion(quest));
+                questsScheduledForRemoval.Add(quest);
             }
         }
+    }
+
+    IEnumerator DelayedQuestCompletion(Quest quest)
+    {
+        yield return new WaitForSeconds(questCompletionDelay);
+
+        ResetQuest(quest);
+
+        if (quest.nextQuest != null && !activeQuests.Contains(quest.nextQuest))
+        {
+            StartCoroutine(AddNewQuestAfterDelay(quest.nextQuest));
+        }
+
+        activeQuests.Remove(quest);
+        questsScheduledForRemoval.Remove(quest);
+    }
+
+    IEnumerator AddNewQuestAfterDelay(Quest nextQuest)
+    {
+
+        yield return new WaitForSeconds(newQuestAdditionDelay);
+        activeQuests.Add(nextQuest);
     }
 
     void ResetQuest(Quest quest)
@@ -50,20 +64,16 @@ public class QuestManager : MonoBehaviour
 
     public void ResetAllScriptableObjects()
     {
-
         foreach (Quest quest in activeQuests)
         {
-
             foreach (QuestObjective objective in quest.objectives)
             {
-
                 if (objective is IResettable resettableObjective)
                 {
                     resettableObjective.ResetData();
                 }
             }
 
-          
             if (quest is IResettable resettableQuest)
             {
                 resettableQuest.ResetData();

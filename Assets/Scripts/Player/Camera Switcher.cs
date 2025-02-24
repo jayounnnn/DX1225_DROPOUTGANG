@@ -16,13 +16,19 @@ public class CameraSwitcher : MonoBehaviour
     private SkinnedMeshRenderer[] meshRenderers;
     private bool isFirstPerson = false;
     private Coroutine meshDisableCoroutine;
+    private Animator animator;
 
     public bool IsFirstPerson => isFirstPerson;
+
+    private bool temporarySwitchActive = false;
+    private bool previousIsFirstPerson;
 
     void Start()
     {
         if (characterModel != null)
             meshRenderers = characterModel.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        animator = characterModel.GetComponent<Animator>();
 
         SetFirstPerson();
     }
@@ -48,6 +54,7 @@ public class CameraSwitcher : MonoBehaviour
 
     public void SetThirdPerson()
     {
+        animator.enabled = true;
         isFirstPerson = false;
         firstPersonCamera.Priority = 10;
         thirdPersonCamera.Priority = 20;
@@ -70,6 +77,7 @@ public class CameraSwitcher : MonoBehaviour
             {
                 mr.enabled = false;
                 RightArm.gameObject.SetActive(true);
+                animator.enabled = false;
             }
         }
         meshDisableCoroutine = null;
@@ -95,5 +103,25 @@ public class CameraSwitcher : MonoBehaviour
         }
     }
 
+    public void EnterTemporaryFirstPerson()
+    {
+        if (!isFirstPerson)
+        {
+            previousIsFirstPerson = isFirstPerson;
+            temporarySwitchActive = true;
+            SetFirstPerson();
+        }
+    }
 
+    public void ExitTemporaryFirstPerson()
+    {
+        if (temporarySwitchActive)
+        {
+            if (!previousIsFirstPerson)
+                SetThirdPerson();
+            else
+                SetFirstPerson();
+            temporarySwitchActive = false;
+        }
+    }
 }
