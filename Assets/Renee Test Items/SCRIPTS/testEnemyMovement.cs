@@ -109,9 +109,11 @@ public class testEnemyMovement : EnemyBase
     {
         if (other.CompareTag("Throwable"))
         {
-            lastThrowablePosition = other.transform.position;
-            hasThrowableTarget = true;
-            Debug.Log(name + " detected a throwable at " + lastThrowablePosition);
+            Vector3 throwablePosition = other.transform.position;
+            Debug.Log(name + " detected a throwable at " + throwablePosition);
+
+            // Switch to Investigation State
+            stateMachine.ChangeState(new InvestigationState(this, stateMachine, throwablePosition, new PatrolState(this, stateMachine, waypoints)));
         }
     }
 

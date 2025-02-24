@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class EnemyBase : Damageable // Now inherits from Damageable
+public abstract class EnemyBase : Damageable
 {
     public float speed = 2f;
     public int damage = 10;
@@ -16,7 +16,6 @@ public abstract class EnemyBase : Damageable // Now inherits from Damageable
     protected void Awake()
     {
         base.Start();
-
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         stateMachine = GetComponent<EnemyStateMachine>();
@@ -32,15 +31,22 @@ public abstract class EnemyBase : Damageable // Now inherits from Damageable
         if (stateMachine == null)
         {
             Debug.LogError(name + " missing EnemyStateMachine", this);
-            return; 
+            return;
         }
 
-        stateMachine.ChangeState(new IdleState(this, stateMachine)); 
+        stateMachine.ChangeState(new IdleState(this, stateMachine));
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        // Draw the investigation radius when the enemy is selected
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, investigationRadius);
     }
 
     public override void TakeDamage(float amount)
     {
-        base.TakeDamage(amount); 
+        base.TakeDamage(amount);
 
         if (!isAlive)
         {
@@ -55,7 +61,7 @@ public abstract class EnemyBase : Damageable // Now inherits from Damageable
         Attack();
     }
 
-    protected override void OnDestroyed() // Overrides Damageable's OnDestroyed()
+    protected override void OnDestroyed()
     {
         if (!isInvincible)
         {
