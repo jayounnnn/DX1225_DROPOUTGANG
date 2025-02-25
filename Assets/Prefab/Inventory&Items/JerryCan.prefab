@@ -121,7 +121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   QuestID: 
   item:
-    itemName: JerryCan
+    itemName: Gasoline
     itemType: 2
     icon: {fileID: 21300000, guid: 0b31e225e788bfb4bbe1641b9d724722, type: 3}
     batteryLife: 100
