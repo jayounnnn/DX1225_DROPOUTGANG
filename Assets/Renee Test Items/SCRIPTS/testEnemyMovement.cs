@@ -5,30 +5,28 @@ using System.Collections.Generic;
 
 public class testEnemyMovement : EnemyBase
 {
+    [Header("States")]
+    public IEnemyState patrolState;
+    public IEnemyState chaseState;
+    //public IEnemyState attackState;
+    public IEnemyState idleState;
+    public IEnemyState investigateState;
+
     [Header("Detection Settings")]
     private ConeCast3D coneCast;
     private Transform detectedPlayer;
 
-    [Header("Patrol Settings")]
-    public List<Transform> waypoints = new List<Transform>(); // Waypoints list
-    private int currentWaypointIndex = 0;
-    private bool isWaiting = false;
-
     [Header("Idle Settings")]
-    public float idleTimeAtWaypoint = 2f; // Time to idle at each waypoint
+    public float idleTimeAtWaypoint = 2f; 
 
     [Header("Roaming Settings")]
     private float roamRadius = 10f;
     private Vector3 roamTarget;
 
-    private Transform player;
+    private NavMeshAgent agent;
     private int playerLayer;
     private float detectionRange = 5f;
-    private float raycastHeight = 1.5f; // Height for raycasts
-
-    private NavMeshAgent agent;
-    private Vector3 lastThrowablePosition;
-    private bool hasThrowableTarget = false;
+    private float raycastHeight = 1.5f;
 
     protected override void Start()
     {
@@ -37,6 +35,7 @@ public class testEnemyMovement : EnemyBase
         agent.speed = speed;
 
         playerLayer = LayerMask.GetMask("Player");
+        playerTransform = GetPlayerTransform();
 
         if (waypoints.Count > 0)
         {
@@ -57,25 +56,22 @@ public class testEnemyMovement : EnemyBase
         {
             Debug.LogError(name + " is missing ConeCast3D component!", this);
         }
+
+        if (idleState != null)
+        {
+            stateMachine.ChangeState(idleState);
+        }
     }
 
     private void Update()
     {
-
-        if (hasThrowableTarget)
+        if (DetectPlayerWithRaycast() && chaseState != null)
         {
-            MoveToThrowablePosition();
+            stateMachine.ChangeState(chaseState);
             return;
         }
 
-        // Check for player detection
-        if (DetectPlayerWithRaycast())
-        {
-            stateMachine.ChangeState(new AttackState(this, stateMachine, player));
-            return;
-        }
-
-        // If enemy reaches destination and is not already waiting, idle before moving
+/*        // If enemy reaches destination and is not already waiting, idle before moving
         if (!isWaiting && !agent.pathPending && agent.remainingDistance < 0.5f)
         {
             if (waypoints.Count > 0)
@@ -94,12 +90,12 @@ public class testEnemyMovement : EnemyBase
                 StunState.ForceStun(this);
                 return;
             }
-        }
+        }*/
 
         detectedPlayer = DetectPlayerWithConeCast();
-        if (detectedPlayer != null)
+        if (detectedPlayer != null && chaseState != null)
         {
-            stateMachine.ChangeState(new ChaseState(this, stateMachine, detectedPlayer));
+            stateMachine.ChangeState(chaseState);
             return;
         }
 
@@ -110,29 +106,18 @@ public class testEnemyMovement : EnemyBase
         if (other.CompareTag("Throwable"))
         {
             lastThrowablePosition = other.transform.position;
-            hasThrowableTarget = true;
             Debug.Log(name + " detected a throwable at " + lastThrowablePosition);
-        }
-    }
 
-    private void MoveToThrowablePosition()
-    {
-        agent.SetDestination(lastThrowablePosition);
-
-        // Check if enemy has reached the throwable's location
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
-        {
-            hasThrowableTarget = false; // Reset flag
-            Debug.Log(name + " has reached the throwable's location. Preparing to inspect.");
-
-            stateMachine.ChangeState(new PatrolState(this, stateMachine)); // Placeholder
+            if (investigateState != null)
+            {
+                stateMachine.ChangeState(investigateState);
+            }
         }
     }
 
     private Transform DetectPlayerWithConeCast()
     {
-        if (coneCast == null) return null;
-        return coneCast.GetDetectedPlayer(); // Call ConeCast3D to check for player
+        return coneCast?.GetDetectedPlayer();
     }
 
     protected override void Attack()
@@ -149,7 +134,7 @@ public class testEnemyMovement : EnemyBase
         {
             if (hit.collider.CompareTag("Player")) // Validate player detection
             {
-                player = hit.collider.transform;
+                playerTransform = hit.collider.transform;
                 Debug.Log("Zombie detected the player with Raycast!");
                 return true;
             }
@@ -157,7 +142,7 @@ public class testEnemyMovement : EnemyBase
         return false;
     }
 
-    private IEnumerator IdleBeforeNextWaypoint()
+    /*private IEnumerator IdleBeforeNextWaypoint()
     {
         isWaiting = true;
         agent.isStopped = true; // Stop movement
@@ -168,14 +153,14 @@ public class testEnemyMovement : EnemyBase
         agent.isStopped = false; // Resume movement
         isWaiting = false;
         SetNextWaypoint();
-    }
+    }*/
 
-    private void SetNextWaypoint()
+    public void SetNextWaypoint()
     {
         if (waypoints.Count == 0) return;
 
         agent.SetDestination(waypoints[currentWaypointIndex].position);
-        currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count; // Loop through waypoints
+        currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
     }
 
     private void SetNewRoamTarget()
@@ -187,13 +172,13 @@ public class testEnemyMovement : EnemyBase
     private Vector3 GetRandomNavMeshPosition()
     {
         Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
-        randomDirection += transform.position; // Offset from current position
+        randomDirection += transform.position;
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, NavMesh.AllAreas))
         {
-            return hit.position; // Return a valid point on the NavMesh
+            return hit.position; 
         }
-        return transform.position; // Fallback to current position
+        return transform.position; 
     }
 }

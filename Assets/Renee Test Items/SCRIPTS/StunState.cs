@@ -1,54 +1,44 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
+[CreateAssetMenu(menuName = "EnemyStates/StunState")]
 public class StunState : IEnemyState
 {
-    private EnemyBase enemy;
-    private EnemyStateMachine stateMachine;
-    private float stunDuration = 3f;
-    private float elapsedTime = 0f;
-    private float rotationSpeed = 100f;
-    private float rotationAmplitude = 30f; // Maximum rotation angle
+    public float stunDuration = 3f;
+    public float rotationSpeed = 100f;
+    public float rotationAmplitude = 30f;
+
     private Quaternion originalRotation;
-    private Vector3 storedDestination; // Store the patrol destination
-    private bool wasMoving; // Was the enemy moving before stun?
-    private UnityEngine.AI.NavMeshAgent agent;
-    private IEnemyState previousState; // Store previous state
+    private Vector3 storedDestination;
+    private bool wasMoving;
 
-    public StunState(EnemyBase enemy, EnemyStateMachine stateMachine, IEnemyState lastState)
-    {
-        this.enemy = enemy;
-        this.stateMachine = stateMachine;
-        this.agent = enemy.GetComponent<UnityEngine.AI.NavMeshAgent>();
-        this.previousState = lastState; // Store the last known state before stun
-    }
-
-    public void EnterState()
+    public override void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " is stunned!");
-        originalRotation = enemy.transform.rotation;
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
 
+        originalRotation = enemy.transform.rotation;
         wasMoving = agent.hasPath;
         storedDestination = agent.destination;
 
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
 
-        enemy.StartCoroutine(StunTimer());
+        enemy.StartCoroutine(StunTimer(enemy, stateMachine));
     }
 
-    public void UpdateState()
+    public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        elapsedTime += Time.deltaTime;
-
-        float angle = Mathf.Sin(elapsedTime * rotationSpeed * Mathf.Deg2Rad) * rotationAmplitude;
+        float angle = Mathf.Sin(Time.time * rotationSpeed * Mathf.Deg2Rad) * rotationAmplitude;
         enemy.transform.rotation = originalRotation * Quaternion.Euler(0, angle, 0);
     }
 
-    public void ExitState()
+    public override void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " recovered from stun.");
-        enemy.transform.rotation = originalRotation; // Reset rotation
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        enemy.transform.rotation = originalRotation;
 
         if (wasMoving)
         {
@@ -57,19 +47,15 @@ public class StunState : IEnemyState
         }
     }
 
-    private IEnumerator StunTimer()
+    private IEnumerator StunTimer(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         yield return new WaitForSeconds(stunDuration);
+        testEnemyMovement enemyMovement = enemy as testEnemyMovement;
 
-        if (previousState != null)
+        if (enemyMovement != null)
         {
             Debug.Log(enemy.name + " returning to previous state after stun.");
-            stateMachine.ChangeState(previousState);
-        }
-        else
-        {
-            // Default fallback: Resume patrol
-            stateMachine.ChangeState(new PatrolState(enemy, stateMachine));
+            stateMachine.ChangeState(enemy.defaultState);
         }
     }
 
@@ -79,10 +65,7 @@ public class StunState : IEnemyState
         if (stateMachine != null)
         {
             Debug.Log(enemy.name + " is forcefully stunned!");
-
-            IEnemyState lastState = stateMachine.GetCurrentState();
-
-            stateMachine.ChangeState(new StunState(enemy, stateMachine, lastState));
+            stateMachine.ChangeState(Resources.Load<StunState>("StunState"));
         }
         else
         {

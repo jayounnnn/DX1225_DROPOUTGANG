@@ -33,7 +33,6 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 7485558080015575173}
   - {fileID: 8395326311855245304}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -120,10 +119,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3edc3ae188a55b45a30ab54144fe861, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  QuestID: 
   item:
     itemName: Wrench
     itemType: 2
     icon: {fileID: 21300000, guid: 930d284e22aafa246bc8a16a2bf8b015, type: 3}
+    batteryLife: 100
   isPlayerNearby: 0
 --- !u!1 &2348999435587706723
 GameObject:
@@ -199,8 +200,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279111182
-  m_fontColor: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -291,7 +292,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2309673091388705599}
-  m_Father: {fileID: 462168}
+  m_Father: {fileID: 8395326311855245304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -390,7 +391,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7485558080015575173}
   m_Father: {fileID: 462168}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8767170936370316476

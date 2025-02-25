@@ -1,49 +1,107 @@
 using UnityEngine;
-using UnityEngine.AI; // Import NavMesh
+using UnityEngine.AI;
 
+[CreateAssetMenu(menuName = "EnemyStates/AttackState")]
 public class AttackState : IEnemyState
 {
-    private EnemyBase enemy;
-    private EnemyStateMachine stateMachine;
-    private Transform player;
-    private NavMeshAgent agent;
-    private float attackRange = 2f;
+    public float attackRange = 2f;
+    public float attackCooldown = 1.5f;
+    private float lastAttackTime = 0f;
 
-    public AttackState(EnemyBase enemy, EnemyStateMachine stateMachine, Transform player)
+    public override void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        this.enemy = enemy;
-        this.stateMachine = stateMachine;
-        this.player = player;
-        agent = enemy.GetComponent<NavMeshAgent>();
-
-        agent.SetDestination(player.position); // Move towards player
+        Debug.Log(enemy.name + " has entered Attack State!");
     }
 
-    public void EnterState()
+    public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        Debug.Log(enemy.name + " is Attacking!");
-    }
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        Transform player = enemy.GetPlayerTransform();
 
-    public void UpdateState()
-    {
-        if (Vector3.Distance(enemy.transform.position, player.position) <= attackRange)
+        if (player == null)
         {
-            enemy.PerformAttack(); // Attack when in range
+            stateMachine.ChangeState(enemy.defaultState);
+            return;
+        }
+
+        float distanceToPlayer = Vector3.Distance(enemy.transform.position, player.position);
+
+        // Ensure enemy stays in AttackState while the cooldown is active
+        if (distanceToPlayer <= attackRange)
+        {
+            agent.isStopped = true; // Ensure enemy doesn't move while attacking
+
+            if (Time.time >= lastAttackTime + attackCooldown)
+            {
+                PerformAttack(enemy);
+                lastAttackTime = Time.time;
+            }
         }
         else
         {
-            agent.SetDestination(player.position); // Keep moving toward player
+            Debug.Log(enemy.name + " lost attack range. Resuming chase.");
+            agent.isStopped = false;
+            stateMachine.ChangeState(enemy.defaultState); // Return to chasing
         }
 
-        // If player is too far, return to patrol
-        if (Vector3.Distance(enemy.transform.position, player.position) > 6f)
+        // If player moves too far away, return to patrol
+        if (distanceToPlayer > 6f)
         {
-            stateMachine.ChangeState(new PatrolState(enemy, stateMachine));
+            Debug.Log(enemy.name + " lost the player. Returning to patrol.");
+            stateMachine.ChangeState(enemy.defaultState);
         }
     }
 
-    public void ExitState()
+    // Perform attack with sphere detection
+    private void PerformAttack(EnemyBase enemy)
     {
-        Debug.Log(enemy.name + " is stopping Attack.");
+        SphereCollider attackCollider = enemy.GetComponent<SphereCollider>();
+
+        if (attackCollider == null)
+        {
+            Debug.LogError(enemy.name + " has no attack SphereCollider assigned!");
+            return;
+        }
+
+        Debug.Log(enemy.name + " is attacking!");
+
+        attackCollider.enabled = true;
+
+        Collider[] hitColliders = Physics.OverlapSphere(attackCollider.transform.position, attackCollider.radius);
+        foreach (Collider hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Player"))
+            {
+                Damageable target = hitCollider.GetComponent<Damageable>();
+                PlayerCombat targetParry = hitCollider.GetComponent<PlayerCombat>();
+
+                if (targetParry != null && targetParry.IsParrying())
+                {
+                    Rigidbody enemyRb = enemy.GetComponent<Rigidbody>();
+                    if (enemyRb != null)
+                    {
+                        Vector3 knockbackDirection = (enemyRb.transform.position - target.transform.position).normalized;
+                        enemyRb.AddForce(knockbackDirection * 5f, ForceMode.Impulse);
+                    }
+
+                    Debug.Log("Player parried the attack! Enemy knocked back.");
+                }
+
+                if (target != null)
+                {
+                    target.TakeDamage(10);
+                }
+
+                Debug.Log("Enemy hit Player");
+            }
+        }
+
+        attackCollider.enabled = false;
+        Debug.Log(enemy.name + " attack finished.");
+    }
+
+    public override void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine)
+    {
+        Debug.Log(enemy.name + " is leaving Attack State.");
     }
 }

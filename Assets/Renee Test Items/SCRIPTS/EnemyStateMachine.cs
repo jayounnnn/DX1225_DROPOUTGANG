@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class EnemyStateMachine : MonoBehaviour
 {
+    [Header("Assigned States")]
+    public IEnemyState initialState;
+
+
     private IEnemyState currentState;
     private EnemyBase enemy;
 
@@ -12,19 +16,28 @@ public class EnemyStateMachine : MonoBehaviour
 
     private void Start()
     {
-        ChangeState(new IdleState(enemy, this)); // Initial state
+        if (initialState != null)
+        {
+            ChangeState(initialState);
+        }
+        else
+        {
+            Debug.LogError(name + " has no initial state assigned!", this);
+        }
     }
 
     private void Update()
     {
-        currentState?.UpdateState();
+        currentState?.UpdateState(enemy, this);
     }
 
     public void ChangeState(IEnemyState newState)
     {
-        currentState?.ExitState();
+        if (newState == null) return;
+
+        currentState?.ExitState(enemy, this);
         currentState = newState;
-        currentState?.EnterState();
+        currentState?.EnterState(enemy, this);
     }
 
     public IEnemyState GetCurrentState()

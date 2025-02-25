@@ -1,57 +1,57 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
+[CreateAssetMenu(menuName = "EnemyStates/ChaseState")]
 public class ChaseState : IEnemyState
 {
-    private EnemyBase enemy;
-    private EnemyStateMachine stateMachine;
-    private Transform player;
-    private NavMeshAgent agent;
-
-    private float detectionRange = 5f;
-    private float lostPlayerTime = 3f; // Time before returning to patrol
+    public float lostPlayerTime = 3f;
     private float timeSinceLastSeen = 0f;
-    private bool isChasing = false;
 
-    public ChaseState(EnemyBase enemy, EnemyStateMachine stateMachine, Transform player)
-    {
-        this.enemy = enemy;
-        this.stateMachine = stateMachine;
-        this.player = player;
-        agent = enemy.GetComponent<NavMeshAgent>();
-    }
-
-    public void EnterState()
+    public override void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " started chasing the player!");
-        isChasing = true;
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
         agent.isStopped = false;
     }
 
-    public void UpdateState()
+    public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        if (player == null)
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        Transform player = enemy.GetPlayerTransform();
+
+        if (player == null || enemy.isPlayerHiding)
         {
-            timeSinceLastSeen += Time.deltaTime;
+            Debug.Log(enemy.name + " stopped chasing: Player is hiding or not found.");
+            stateMachine.ChangeState(enemy.defaultState); // Return to patrol or idle
+            return;
+        }
+
+        float distanceToPlayer = Vector3.Distance(enemy.transform.position, player.position);
+
+        // If within attack range, stop moving and switch to AttackState
+        if (distanceToPlayer <= 1.5f) // Attack range threshold
+        {
+            agent.isStopped = true; // Stop movement
+            Debug.Log(enemy.name + " is in range. Switching to Attack State.");
+            stateMachine.ChangeState(enemy.attackState);
+            return;
         }
         else
         {
+            agent.isStopped = false; // Ensure movement continues if not attacking
             agent.SetDestination(player.position);
-            timeSinceLastSeen = 0f; // Reset timer if player is visible
         }
 
-        // If the player has been out of range for more than 'lostPlayerTime', return to patrol
-        if (timeSinceLastSeen >= lostPlayerTime)
+        // If player moves too far away, return to patrol or idle
+        if (distanceToPlayer > 6f)
         {
             Debug.Log(enemy.name + " lost the player. Returning to patrol.");
-            stateMachine.ChangeState(new PatrolState(enemy, stateMachine));
+            stateMachine.ChangeState(enemy.defaultState);
         }
     }
 
-    public void ExitState()
+    public override void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " stopped chasing.");
-        isChasing = false;
     }
 }

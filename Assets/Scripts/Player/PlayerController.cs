@@ -260,18 +260,29 @@ public class PlayerController : Damageable
         if (hotbarSlots[slotIndex].transform.childCount > 0) // Check if slot has an item
         {
             Transform itemInSlot = hotbarSlots[slotIndex].transform.GetChild(0);
-            Consumable consumable = itemInSlot.GetComponent<Consumable>();
+            Item item = InventoryManager.instance.items.Find(i => i.itemName == itemInSlot.name);
 
-            if (consumable != null)
+            if (item != null)
             {
-                Debug.Log("Using consumable from Hotbar Slot " + (slotIndex + 1));
-                consumable.UseConsumable();
-                //Update UI after consuming the item
-                hotbarSlots[slotIndex].RemoveItem();
-            }
-            else
-            {
-                Debug.Log("Item in Hotbar Slot " + (slotIndex + 1) + " is not a consumable.");
+                if (item.itemType == ItemType.Consumable)
+                {
+                    // Use consumable item
+                    Consumable consumable = itemInSlot.GetComponent<Consumable>();
+                    if (consumable != null)
+                    {
+                        Debug.Log("Using consumable from Hotbar Slot " + (slotIndex + 1));
+                        consumable.UseConsumable();
+                        hotbarSlots[slotIndex].RemoveItem();
+                    }
+                }
+                else if (item.itemType == ItemType.QuestItem)
+                {
+                    TryOpenDoorWithKey(itemInSlot, item, slotIndex);
+                }
+                else
+                {
+                    Debug.Log("Item in Hotbar Slot " + (slotIndex + 1) + " is not usable.");
+                }
             }
         }
         else
@@ -279,6 +290,33 @@ public class PlayerController : Damageable
             Debug.Log("Hotbar Slot " + (slotIndex + 1) + " is empty.");
         }
     }
+    private void TryOpenDoorWithKey(Transform itemInSlot, Item keyItem, int slotIndex)
+    {
+        // Find all doors in the scene
+        Door[] doors = FindObjectsOfType<Door>();
+
+        foreach (Door door in doors)
+        {
+            // Check if the player is near a door that requires a key
+            if (door.openMethod == Door.DoorOpenMethod.Key && !door.isOpen && door.PlayerIsNearby())
+            {
+                // Check if the key matches the door's keyName
+                if (keyItem.itemName == door.keyName)
+                {
+                    door.OpenDoor();
+                    Destroy(itemInSlot.gameObject); // Remove the key from the hotbar
+                    hotbarSlots[slotIndex].RemoveItem(); // Remove UI reference
+                    Debug.Log($"Used {keyItem.itemName} to open {door.keyName}!");
+                    return;
+                }
+                else
+                {
+                    Debug.Log($"{keyItem.itemName} does not match the required key ({door.keyName})!");
+                }
+            }
+        }
+    }
+
     private void ProcessJump(bool jumpPressed)
     {
         ySpeed += Physics.gravity.y * Time.deltaTime;

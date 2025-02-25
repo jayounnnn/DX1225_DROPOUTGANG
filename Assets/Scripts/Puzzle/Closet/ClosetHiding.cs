@@ -21,6 +21,8 @@ public class Closet : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+
         if (player != null)
         {
             cameraSwitcher = player.GetComponentInChildren<CameraSwitcher>();
@@ -71,6 +73,12 @@ public class Closet : MonoBehaviour
             Debug.LogWarning("Closet: Hiding spot not assigned.");
         }
 
+        EnemyBase[] enemies = FindObjectsOfType<EnemyBase>();
+        foreach (EnemyBase enemy in enemies)
+        {
+            enemy.isPlayerHiding = true;
+        }
+
         isHiding = true;
         canExit = false;
 
@@ -102,6 +110,13 @@ public class Closet : MonoBehaviour
 
         if (playerController != null)
             playerController.enabled = true;
+
+        EnemyBase[] enemies = FindObjectsOfType<EnemyBase>();
+        foreach (EnemyBase enemy in enemies)
+        {
+            enemy.isPlayerHiding = false;
+        }
+
 
         isHiding = false;
     }
