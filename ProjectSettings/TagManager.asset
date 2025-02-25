@@ -8,6 +8,8 @@ TagManager:
   - Throwable
   - Enemy
   - Wall
+  - Ground
+  - ChaseTrigger
   layers:
   - Default
   - TransparentFX

@@ -21,6 +21,8 @@ public class Closet : MonoBehaviour
 
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+
         if (player != null)
         {
             cameraSwitcher = player.GetComponentInChildren<CameraSwitcher>();

@@ -20,7 +20,6 @@ public class BillBoard : MonoBehaviour
         Quaternion rotation = Camera.main.transform.rotation;
         transform.LookAt(transform.position + rotation * Vector3.forward, rotation * Vector3.up);
     }
-
     public void SetCanvasActive(bool isActive)
     {
         if (worldCanvas != null)

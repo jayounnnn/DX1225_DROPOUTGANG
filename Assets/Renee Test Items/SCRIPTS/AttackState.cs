@@ -1,49 +1,55 @@
 using UnityEngine;
-using UnityEngine.AI; // Import NavMesh
+using UnityEngine.AI;
 
+[CreateAssetMenu(menuName = "EnemyStates/AttackState")]
 public class AttackState : IEnemyState
 {
-    private EnemyBase enemy;
-    private EnemyStateMachine stateMachine;
-    private Transform player;
-    private NavMeshAgent agent;
-    private float attackRange = 2f;
+    public float attackRange = 2f;
+    public float attackCooldown = 1.5f;
+    private float lastAttackTime = 0f;
 
-    public AttackState(EnemyBase enemy, EnemyStateMachine stateMachine, Transform player)
+    public override void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        this.enemy = enemy;
-        this.stateMachine = stateMachine;
-        this.player = player;
-        agent = enemy.GetComponent<NavMeshAgent>();
-
-        agent.SetDestination(player.position); // Move towards player
+        Debug.Log(enemy.name + " has entered Attack State!");
     }
 
-    public void EnterState()
+    public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        Debug.Log(enemy.name + " is Attacking!");
-    }
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        testEnemyMovement enemyMovement = enemy as testEnemyMovement;
+        Transform player = enemy.GetPlayerTransform();
 
-    public void UpdateState()
-    {
-        if (Vector3.Distance(enemy.transform.position, player.position) <= attackRange)
+
+        if (player == null)
         {
-            enemy.PerformAttack(); // Attack when in range
+            stateMachine.ChangeState(enemyMovement.patrolState);
+            return;
+        }
+
+        float distanceToPlayer = Vector3.Distance(enemy.transform.position, player.position);
+
+        if (distanceToPlayer <= attackRange)
+        {
+            if (Time.time >= lastAttackTime + attackCooldown)
+            {
+                enemy.PerformAttack();
+                lastAttackTime = Time.time;
+            }
         }
         else
         {
-            agent.SetDestination(player.position); // Keep moving toward player
+            agent.SetDestination(player.position);
         }
 
-        // If player is too far, return to patrol
-        if (Vector3.Distance(enemy.transform.position, player.position) > 6f)
+        // If player moves too far away, return to chasing
+        if (distanceToPlayer > 6f)
         {
-            stateMachine.ChangeState(new PatrolState(enemy, stateMachine));
+            stateMachine.ChangeState(enemyMovement.chaseState);
         }
     }
 
-    public void ExitState()
+    public override void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        Debug.Log(enemy.name + " is stopping Attack.");
+        Debug.Log(enemy.name + " is leaving Attack State.");
     }
 }
