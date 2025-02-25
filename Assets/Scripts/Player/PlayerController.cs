@@ -275,10 +275,9 @@ public class PlayerController : Damageable
                         hotbarSlots[slotIndex].RemoveItem();
                     }
                 }
-                else if (item.itemType == ItemType.QuestItem && item.itemName == "Key")
+                else if (item.itemType == ItemType.QuestItem)
                 {
-                    hotbarSlots[slotIndex].TryOpenDoor(itemInSlot);
-                    hotbarSlots[slotIndex].RemoveItem();
+                    TryOpenDoorWithKey(itemInSlot, item, slotIndex);
                 }
                 else
                 {
@@ -291,6 +290,33 @@ public class PlayerController : Damageable
             Debug.Log("Hotbar Slot " + (slotIndex + 1) + " is empty.");
         }
     }
+    private void TryOpenDoorWithKey(Transform itemInSlot, Item keyItem, int slotIndex)
+    {
+        // Find all doors in the scene
+        Door[] doors = FindObjectsOfType<Door>();
+
+        foreach (Door door in doors)
+        {
+            // Check if the player is near a door that requires a key
+            if (door.openMethod == Door.DoorOpenMethod.Key && !door.isOpen && door.PlayerIsNearby())
+            {
+                // Check if the key matches the door's keyName
+                if (keyItem.itemName == door.keyName)
+                {
+                    door.OpenDoor();
+                    Destroy(itemInSlot.gameObject); // Remove the key from the hotbar
+                    hotbarSlots[slotIndex].RemoveItem(); // Remove UI reference
+                    Debug.Log($"Used {keyItem.itemName} to open {door.keyName}!");
+                    return;
+                }
+                else
+                {
+                    Debug.Log($"{keyItem.itemName} does not match the required key ({door.keyName})!");
+                }
+            }
+        }
+    }
+
     private void ProcessJump(bool jumpPressed)
     {
         ySpeed += Physics.gravity.y * Time.deltaTime;
