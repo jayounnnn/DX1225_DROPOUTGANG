@@ -17,23 +17,35 @@ public class ChaseState : IEnemyState
     public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
-        testEnemyMovement enemyMovement = enemy as testEnemyMovement;
-        Transform player = enemyMovement?.GetPlayerTransform();
+        Transform player = enemy.GetPlayerTransform();
 
         if (player == null || enemy.isPlayerHiding)
         {
-            timeSinceLastSeen += Time.deltaTime;
+            Debug.Log(enemy.name + " stopped chasing: Player is hiding or not found.");
             stateMachine.ChangeState(enemy.defaultState); // Return to patrol or idle
+            return;
+        }
+
+        float distanceToPlayer = Vector3.Distance(enemy.transform.position, player.position);
+
+        // If within attack range, stop moving and switch to AttackState
+        if (distanceToPlayer <= 1.5f) // Attack range threshold
+        {
+            agent.isStopped = true; // Stop movement
+            Debug.Log(enemy.name + " is in range. Switching to Attack State.");
+            stateMachine.ChangeState(enemy.attackState);
             return;
         }
         else
         {
+            agent.isStopped = false; // Ensure movement continues if not attacking
             agent.SetDestination(player.position);
-            timeSinceLastSeen = 0f;
         }
 
-        if (timeSinceLastSeen >= lostPlayerTime)
+        // If player moves too far away, return to patrol or idle
+        if (distanceToPlayer > 6f)
         {
+            Debug.Log(enemy.name + " lost the player. Returning to patrol.");
             stateMachine.ChangeState(enemy.defaultState);
         }
     }

@@ -14,6 +14,7 @@ public abstract class EnemyBase : Damageable
     [Header("State Machine")]
     public EnemyStateMachine stateMachine;
     public IEnemyState defaultState;
+    public IEnemyState attackState;
 
     [Header("Patrol Settings")]
     public List<Transform> waypoints = new List<Transform>();
@@ -35,6 +36,14 @@ public abstract class EnemyBase : Damageable
         if (stateMachine == null)
         {
             Debug.LogError(name + " is missing EnemyStateMachine!", this);
+        }
+
+        SphereCollider attackCollider = GetComponent<SphereCollider>();
+        if (attackCollider == null)
+        {
+            attackCollider = gameObject.AddComponent<SphereCollider>();
+            attackCollider.isTrigger = true; // Ensure it detects collisions
+            attackCollider.radius = 1.5f;    // Default attack radius
         }
     }
 
