@@ -1,35 +1,28 @@
 using UnityEngine;
-using UnityEngine.AI; // Import NavMesh
 
+[CreateAssetMenu(menuName = "EnemyStates/IdleState")]
 public class IdleState : IEnemyState
 {
-    private EnemyBase enemy;
-    private EnemyStateMachine stateMachine;
-    private float idleTime = 5f; // 5-second delay before patrolling
+    public float idleTime = 5f;
     private float timer;
 
-    public IdleState(EnemyBase enemy, EnemyStateMachine stateMachine)
+    public override void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
-        this.enemy = enemy;
-        this.stateMachine = stateMachine;
-    }
-
-    public void EnterState()
-    {
-        Debug.Log(enemy.name + " is now Idle. Waiting for " + idleTime + " seconds.");
+        Debug.Log(enemy.name + " is now Idle for " + idleTime + " seconds.");
         timer = 0f;
     }
 
-    public void UpdateState()
+    public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         timer += Time.deltaTime;
         if (timer >= idleTime)
         {
-            stateMachine.ChangeState(new PatrolState(enemy, stateMachine)); // Start patrolling after 5 seconds
+            testEnemyMovement enemyMovement = enemy as testEnemyMovement;
+            stateMachine.ChangeState(enemyMovement.patrolState);
         }
     }
 
-    public void ExitState()
+    public override void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " is leaving Idle state.");
     }

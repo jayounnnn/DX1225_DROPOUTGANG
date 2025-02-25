@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public interface IEnemyState
+public abstract class IEnemyState : ScriptableObject
 {
-    void EnterState();
-    void UpdateState();
-    void ExitState();
+    public abstract void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine);
+    public abstract void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine);
+    public abstract void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine);
 }

@@ -1,36 +1,25 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
+[CreateAssetMenu(menuName = "EnemyStates/ChaseState")]
 public class ChaseState : IEnemyState
 {
-    private EnemyBase enemy;
-    private EnemyStateMachine stateMachine;
-    private Transform player;
-    private NavMeshAgent agent;
-
-    private float detectionRange = 5f;
-    private float lostPlayerTime = 3f; // Time before returning to patrol
+    public float lostPlayerTime = 3f;
     private float timeSinceLastSeen = 0f;
-    private bool isChasing = false;
 
-    public ChaseState(EnemyBase enemy, EnemyStateMachine stateMachine, Transform player)
-    {
-        this.enemy = enemy;
-        this.stateMachine = stateMachine;
-        this.player = player;
-        agent = enemy.GetComponent<NavMeshAgent>();
-    }
-
-    public void EnterState()
+    public override void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " started chasing the player!");
-        isChasing = true;
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
         agent.isStopped = false;
     }
 
-    public void UpdateState()
+    public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        testEnemyMovement enemyMovement = enemy as testEnemyMovement;
+        Transform player = enemyMovement?.GetPlayerTransform();
+
         if (player == null)
         {
             timeSinceLastSeen += Time.deltaTime;
@@ -38,20 +27,17 @@ public class ChaseState : IEnemyState
         else
         {
             agent.SetDestination(player.position);
-            timeSinceLastSeen = 0f; // Reset timer if player is visible
+            timeSinceLastSeen = 0f;
         }
 
-        // If the player has been out of range for more than 'lostPlayerTime', return to patrol
         if (timeSinceLastSeen >= lostPlayerTime)
         {
-            Debug.Log(enemy.name + " lost the player. Returning to patrol.");
-            stateMachine.ChangeState(new PatrolState(enemy, stateMachine));
+            stateMachine.ChangeState(enemy.defaultState);
         }
     }
 
-    public void ExitState()
+    public override void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " stopped chasing.");
-        isChasing = false;
     }
 }

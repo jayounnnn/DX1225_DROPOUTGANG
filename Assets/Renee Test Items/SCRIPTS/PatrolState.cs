@@ -2,77 +2,42 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
+[CreateAssetMenu(menuName = "EnemyStates/PatrolState")]
 public class PatrolState : IEnemyState
 {
-    private EnemyBase enemy;
-    private EnemyStateMachine stateMachine;
-    private NavMeshAgent agent;
-    private List<Transform> waypoints;
-    private int currentWaypointIndex = 0;
-    private Vector3 defaultPatrolTarget;
-
-    public PatrolState(EnemyBase enemy, EnemyStateMachine stateMachine, List<Transform> waypoints = null)
-    {
-        this.enemy = enemy;
-        this.stateMachine = stateMachine;
-        this.agent = enemy.GetComponent<NavMeshAgent>();
-
-        if (waypoints != null && waypoints.Count > 0)
-        {
-            this.waypoints = new List<Transform>(waypoints);
-        }
-        else
-        {
-            this.waypoints = new List<Transform>();
-            defaultPatrolTarget = enemy.transform.position; // Default patrol location
-        }
-    }
-
-    public void EnterState()
+    public override void EnterState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " started patrolling.");
-        SetNextPatrolPoint();
+        SetNextPatrolPoint(enemy);
     }
 
-    public void UpdateState()
+    public override void UpdateState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
-            SetNextPatrolPoint();
+            SetNextPatrolPoint(enemy);
         }
     }
 
-    public void ExitState()
+    public override void ExitState(EnemyBase enemy, EnemyStateMachine stateMachine)
     {
         Debug.Log(enemy.name + " stopped patrolling.");
     }
 
-    private void SetNextPatrolPoint()
+/*    private void SetNextPatrolPoint(EnemyBase enemy)
     {
-        if (waypoints.Count > 0)
-        {
-            agent.SetDestination(waypoints[currentWaypointIndex].position);
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
-        }
-        else
-        {
-            // Default patrol logic
-            Vector3 randomPosition = GetRandomNavMeshPosition();
-            agent.SetDestination(randomPosition);
-        }
-    }
+        testEnemyMovement enemyMovement = enemy as testEnemyMovement;
+        if (enemyMovement == null || enemyMovement.waypoints.Count == 0) return;
 
-    private Vector3 GetRandomNavMeshPosition()
+        NavMeshAgent agent = enemy.GetComponent<NavMeshAgent>();
+        agent.SetDestination(enemyMovement.waypoints[enemyMovement.currentWaypointIndex].position);
+        enemyMovement.currentWaypointIndex = (enemyMovement.currentWaypointIndex + 1) % enemyMovement.waypoints.Count;
+    }*/
+
+    private void SetNextPatrolPoint(EnemyBase enemy)
     {
-        Vector3 randomDirection = Random.insideUnitSphere * 5f;
-        randomDirection += enemy.transform.position; // Offset from current position
-
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(randomDirection, out hit, 5f, NavMesh.AllAreas))
-        {
-            return hit.position; // Return a valid point on the NavMesh
-        }
-
-        return enemy.transform.position; // Fallback to current position
+        enemy.SetNextWaypoint();
     }
 }

@@ -14,11 +14,12 @@ GameObject:
   - component: {fileID: 3126232013760812587}
   - component: {fileID: 3599797895046260810}
   - component: {fileID: 5974253155257172079}
+  - component: {fileID: 8727433090278266755}
   - component: {fileID: 7230598700671317964}
   - component: {fileID: 5943742548668554278}
   m_Layer: 0
   m_Name: Enemy Navmesh test
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,6 +153,24 @@ MonoBehaviour:
   damage: 10
   isInvincible: 1
   investigationRadius: 5
+  stateMachine: {fileID: 0}
+  defaultState: {fileID: 0}
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentWaypointIndex: 0
+  patrolState: {fileID: 0}
+  chaseState: {fileID: 0}
+  attackState: {fileID: 0}
+  idleState: {fileID: 0}
+  investigateState: {fileID: 0}
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -163,6 +182,19 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   idleTimeAtWaypoint: 2
+--- !u!114 &8727433090278266755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5079495356166380843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe080c4d2d994a24dae954f8b7e4c5de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialState: {fileID: 0}
 --- !u!114 &7230598700671317964
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - Wall
   - Ground
+  - ChaseTrigger
   layers:
   - Default
   - TransparentFX
