@@ -8,15 +8,14 @@ public class MazeGenerator : MonoBehaviour
     public int height = 10;
 
     [SerializeField] private int startX = 0;
-    [SerializeField] private int startY = 0;
+    [SerializeField] private int startZ = 0; 
 
     private Cell[,] grid;
 
-    public GameObject wallPrefab;  
+    public GameObject wallPrefab;
     public GameObject floorPrefab;
     public GameObject hiddenWallPrefab;
     public GameObject hiddenWallPrefab2;
-
     public GameObject endObjectPrefab;
 
     [Range(0f, 1f)]
@@ -35,9 +34,9 @@ public class MazeGenerator : MonoBehaviour
         grid = new Cell[width, height];
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int z = 0; z < height; z++)
             {
-                grid[x, y] = new Cell();
+                grid[x, z] = new Cell();
             }
         }
 
@@ -52,27 +51,40 @@ public class MazeGenerator : MonoBehaviour
 
     private void PlaceEndObject()
     {
-
         int endX = width - 1;
-        int endY = height - 1;
-
-        Vector3 endPosition = new Vector3(endX * cellSize, 0f, endY * cellSize);
-
-        endPosition.y = 0.5f;
+        int endZ = height - 1;
+        Vector3 endPosition = transform.position + new Vector3(endX * cellSize, 0f, endZ * cellSize);
+        endPosition.y = this.transform.position.y;
 
         Instantiate(endObjectPrefab, endPosition, Quaternion.identity);
     }
 
-
     private void RemoveEntranceWall()
     {
-        grid[startX, startY].wallBottom = false;
+
+        if (startZ == 0)
+        {
+            grid[startX, startZ].wallBottom = false;
+        }
+        else if (startZ == height - 1)
+        {
+            grid[startX, startZ].wallTop = false;
+        }
+
+        if (startX == 0)
+        {
+            grid[startX, startZ].wallLeft = false;
+        }
+        else if (startX == width - 1)
+        {
+            grid[startX, startZ].wallRight = false;
+        }
     }
 
     void MazeDepthFirstSearch()
     {
         Stack<Vector2Int> stack = new Stack<Vector2Int>();
-        Vector2Int current = new Vector2Int(startX, startY);
+        Vector2Int current = new Vector2Int(startX, startZ);
         grid[current.x, current.y].visited = true;
         stack.Push(current);
 
@@ -106,7 +118,6 @@ public class MazeGenerator : MonoBehaviour
             neighbors.Add(new Vector2Int(cell.x, cell.y - 1));
         if (cell.x + 1 < width && !grid[cell.x + 1, cell.y].visited)
             neighbors.Add(new Vector2Int(cell.x + 1, cell.y));
-
         if (cell.x - 1 >= 0 && !grid[cell.x - 1, cell.y].visited)
             neighbors.Add(new Vector2Int(cell.x - 1, cell.y));
 
@@ -137,22 +148,16 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-
     void DrawMaze()
     {
         GameObject mazeParent = new GameObject("Maze");
 
         for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int z = 0; z < height; z++)
             {
-                Cell cell = grid[x, y];
-
-                Vector3 cellPos = new Vector3(x * cellSize, 0, y * cellSize);
-
-                GameObject floor = Instantiate(floorPrefab, cellPos, Quaternion.identity);
-                floor.transform.localScale = new Vector3(cellSize, 1, cellSize);
-                floor.transform.parent = mazeParent.transform;
+                Cell cell = grid[x, z];
+                Vector3 cellPos = transform.position + new Vector3(x * cellSize, 0, z * cellSize);
 
                 if (cell.wallTop)
                 {
@@ -184,34 +189,28 @@ public class MazeGenerator : MonoBehaviour
                     GameObject wall = Instantiate(wallPrefab, wallPos, Quaternion.Euler(0, 90, 0));
                     wall.transform.localScale = new Vector3(cellSize, wallHeight, 0.1f);
                     wall.transform.parent = mazeParent.transform;
-                
                 }
 
-                //////////////////////////////////////////////////////////////////////
-
-                if (x == startX && y == startY)
-                {
+                if (x == startX && z == startZ)
                     continue;
-                }
 
-
-                // TOP
+                // TOP 
                 if (!cell.wallTop && Random.value < hiddenWallChance)
                 {
                     Vector3 hiddenPos = cellPos + new Vector3(0, 0.5f, cellSize / 2f);
                     GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
                     GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.identity);
-                    hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
+                    hiddenWall.transform.localScale = new Vector3(cellSize, wallHeight, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
 
-                // BOTTOM
+                // BOTTOM 
                 if (!cell.wallBottom && Random.value < hiddenWallChance)
                 {
                     Vector3 hiddenPos = cellPos + new Vector3(0, 0.5f, -cellSize / 2f);
                     GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
                     GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.identity);
-                    hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
+                    hiddenWall.transform.localScale = new Vector3(cellSize, wallHeight, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
 
@@ -221,7 +220,7 @@ public class MazeGenerator : MonoBehaviour
                     Vector3 hiddenPos = cellPos + new Vector3(-cellSize / 2f, 0.5f, 0);
                     GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
                     GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.Euler(0, 90, 0));
-                    hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
+                    hiddenWall.transform.localScale = new Vector3(cellSize, wallHeight, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
 
@@ -231,7 +230,7 @@ public class MazeGenerator : MonoBehaviour
                     Vector3 hiddenPos = cellPos + new Vector3(cellSize / 2f, 0.5f, 0);
                     GameObject hiddenWallPrefabToUse = (Random.value < 0.5f) ? hiddenWallPrefab : hiddenWallPrefab2;
                     GameObject hiddenWall = Instantiate(hiddenWallPrefabToUse, hiddenPos, Quaternion.Euler(0, 90, 0));
-                    hiddenWall.transform.localScale = new Vector3(cellSize, 1, 0.1f);
+                    hiddenWall.transform.localScale = new Vector3(cellSize, wallHeight, 0.1f);
                     hiddenWall.transform.parent = mazeParent.transform;
                 }
             }

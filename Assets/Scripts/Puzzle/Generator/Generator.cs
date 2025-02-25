@@ -28,6 +28,11 @@ public class Generator : MonoBehaviour
         {
             cameraSwitcher = FindAnyObjectByType<CameraSwitcher>();
         }
+
+        Transform generatorUI = GameObject.Find("Generator UI").transform;
+        progressBar = generatorUI.Find("Slider").GetComponent<Slider>();
+        quickTimeBox = generatorUI.Find("Image").gameObject;
+
         if (progressBar != null)
             progressBar.gameObject.SetActive(false);
         if (quickTimeBox != null)
