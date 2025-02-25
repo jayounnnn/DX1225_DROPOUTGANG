@@ -20,9 +20,11 @@ public class ChaseState : IEnemyState
         testEnemyMovement enemyMovement = enemy as testEnemyMovement;
         Transform player = enemyMovement?.GetPlayerTransform();
 
-        if (player == null)
+        if (player == null || enemy.isPlayerHiding)
         {
             timeSinceLastSeen += Time.deltaTime;
+            stateMachine.ChangeState(enemy.defaultState); // Return to patrol or idle
+            return;
         }
         else
         {

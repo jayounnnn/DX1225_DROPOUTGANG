@@ -19,6 +19,9 @@ public abstract class EnemyBase : Damageable
     public List<Transform> waypoints = new List<Transform>();
     public int currentWaypointIndex = 0;
 
+    [Header("Hiding Detection")]
+    public bool isPlayerHiding = false;
+
     protected Animator animator;
     protected Rigidbody rb;
     protected Transform playerTransform;
