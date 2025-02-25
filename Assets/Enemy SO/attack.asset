@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: attack
   m_EditorClassIdentifier: 
   attackRange: 2
-  attackCooldown: 1.5
+  attackCooldown: 0.5

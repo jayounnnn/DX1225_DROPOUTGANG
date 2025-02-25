@@ -8,7 +8,7 @@ public class testEnemyMovement : EnemyBase
     [Header("States")]
     public IEnemyState patrolState;
     public IEnemyState chaseState;
-    public IEnemyState attackState;
+    //public IEnemyState attackState;
     public IEnemyState idleState;
     public IEnemyState investigateState;
 
@@ -172,13 +172,13 @@ public class testEnemyMovement : EnemyBase
     private Vector3 GetRandomNavMeshPosition()
     {
         Vector3 randomDirection = Random.insideUnitSphere * roamRadius;
-        randomDirection += transform.position; // Offset from current position
+        randomDirection += transform.position;
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomDirection, out hit, roamRadius, NavMesh.AllAreas))
         {
-            return hit.position; // Return a valid point on the NavMesh
+            return hit.position; 
         }
-        return transform.position; // Fallback to current position
+        return transform.position; 
     }
 }

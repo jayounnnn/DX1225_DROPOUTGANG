@@ -153,8 +153,9 @@ MonoBehaviour:
   damage: 10
   isInvincible: 1
   investigationRadius: 5
-  stateMachine: {fileID: 0}
-  defaultState: {fileID: 0}
+  stateMachine: {fileID: 8727433090278266755}
+  defaultState: {fileID: 11400000, guid: b5ca6a6d1b1230d4c987fbe6d7153796, type: 2}
+  attackState: {fileID: 11400000, guid: f4f89844e29958c4cbc5327b882eb28e, type: 2}
   waypoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -166,21 +167,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   currentWaypointIndex: 0
-  patrolState: {fileID: 0}
-  chaseState: {fileID: 0}
-  attackState: {fileID: 0}
-  idleState: {fileID: 0}
-  investigateState: {fileID: 0}
-  waypoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  isPlayerHiding: 0
+  patrolState: {fileID: 11400000, guid: b5ca6a6d1b1230d4c987fbe6d7153796, type: 2}
+  chaseState: {fileID: 11400000, guid: 6dce576781c3ec54a8c1ca32ab0a8b62, type: 2}
+  idleState: {fileID: 11400000, guid: d78554785e538b641983a0c50c514bc0, type: 2}
+  investigateState: {fileID: 11400000, guid: 3937d1d283df96948bc179e45ffe2f9a, type: 2}
   idleTimeAtWaypoint: 2
 --- !u!114 &8727433090278266755
 MonoBehaviour:
@@ -194,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe080c4d2d994a24dae954f8b7e4c5de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialState: {fileID: 0}
+  initialState: {fileID: 11400000, guid: d78554785e538b641983a0c50c514bc0, type: 2}
 --- !u!114 &7230598700671317964
 MonoBehaviour:
   m_ObjectHideFlags: 0
