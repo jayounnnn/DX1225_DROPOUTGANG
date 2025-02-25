@@ -8,6 +8,7 @@ public class Door : MonoBehaviour
     [SerializeField] private float openAngle = 90f;
     [SerializeField] private float openSpeed = 2f;
     [SerializeField] private float detectionRadius = 3f;
+    [SerializeField] public string keyName;
     public enum DoorOpenMethod { ElectricalPuzzle, Key }
 
     private Quaternion closedRotation;
